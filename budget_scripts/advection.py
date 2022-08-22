@@ -21,7 +21,9 @@ from xhistogram.xarray import histogram
 from glob import glob
 
 #Open model output
-path = glob('/d1/shared/TXLA_ROMS/numerical_mixing/non-nest/ver0/ocean_avg_0000*.nc')
+path = glob('/d1/shared/TXLA_ROMS/numerical_mixing/non-nest/ver1/1hr/ocean_avg_0000*.nc')
+# path = glob('/d1/shared/TXLA_ROMS/numerical_mixing/non-nest/ver1/30min/ocean_avg_0000*.nc')
+# path = glob('/d1/shared/TXLA_ROMS/numerical_mixing/non-nest/ver1/10min/ocean_avg_0000*.nc')
 ds = xroms.open_mfnetcdf(path)
 ds, grid = xroms.roms_dataset(ds)
 
@@ -314,7 +316,9 @@ svaradv_xr.attrs = ''
 
 # Open the volume-averaged salinity to compute the sbar^2 advection by simplying squaring and
 # multiplying by the volume-advection
-sbar = xr.open_mfdataset('/d2/home/dylan/JAMES/budget_outputs/sbar/sbar_parent_2010_*.nc').sbar
+sbar = xr.open_mfdataset('/d2/home/dylan/JAMES/budget_outputs/sbar/sbar_parent_ver1_2010_*.nc').sbar
+# sbar = xr.open_mfdataset('/d2/home/dylan/JAMES/budget_outputs/30min/sbar/sbar_parent_2010_30min_*.nc').sbar
+# sbar = xr.open_mfdataset('/d2/home/dylan/JAMES/budget_outputs/10min/sbar/sbar_parent_2010_10min_*.nc').sbar
 sbar2_adv =  ((sbar**2)*vol_adv)
 sbar2_adv.attrs = ''
 
@@ -329,22 +333,30 @@ dates = np.arange('2010-06-03', '2010-07-15', dtype = 'datetime64[D]')
 for d in range(len(dates)):    
     #Salt squared
     ssadv_xr_sel = ssadv_xr.sel(ocean_time = str(dates[d]))
-    path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltsquareadv_parent_2010_%s.nc' %d
+    path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltsquareadv_parent_ver1_2010_%s.nc' %d
+#     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/saltsquareadv_parent_2010_30min_%s.nc' %d
+    # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/saltsquareadv_parent_2010_10min_%s.nc' %d
     ssadv_xr_sel.to_netcdf(path, mode = 'w')
 
     #Salt anomaly squared
     svaradv_xr_sel = svaradv_xr.sel(ocean_time = str(dates[d]))
-    path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltvaradv_parent_2010_%s.nc' %d
+    path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltvaradv_parent_ver1_2010_%s.nc' %d
+#     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/saltvaradv_parent_2010_30min_%s.nc' %d
+    # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/saltvaradv_parent_2010_10min_%s.nc' %d
     svaradv_xr_sel.to_netcdf(path, mode = 'w')
     
     #Extra terms 
     sbar2_adv_sel = sbar2_adv.sel(ocean_time = str(dates[d]))
-    path = '/d2/home/dylan/JAMES/budget_outputs/advection/sbar2_advection_2010_%s.nc' %d
+    path = '/d2/home/dylan/JAMES/budget_outputs/advection/sbar2_advection_ver1_2010_%s.nc' %d
+#     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/sbar2_advection_2010_30min_%s.nc' %d
+    # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/sbar2_advection_2010_10min_%s.nc' %d
     sbar2_adv_sel.name = 'sbar2_advection'
     sbar2_adv_sel.to_netcdf(path, mode = 'w')
 
     sbarprime_adv_sel = sbarprime_adv.sel(ocean_time = str(dates[d]))
-    path = '/d2/home/dylan/JAMES/budget_outputs/advection/2sbarsprime_advection_2010_%s.nc' %d
+    path = '/d2/home/dylan/JAMES/budget_outputs/advection/2sbarsprime_advection_ver1_2010_%s.nc' %d
+#     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/2sbarsprime_advection_2010_30min_%s.nc' %d
+    # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/2sbarsprime_advection_2010_10min_%s.nc' %d
     sbarprime_adv_sel.name = '2sbarprime_advection'
     sbarprime_adv_sel.to_netcdf(path, mode = 'w')
     

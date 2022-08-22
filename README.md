@@ -1,7 +1,6 @@
 # `JAMES_numerical_mixing`
 
 JAMES_numerical_mixing contains all python scripts needed to reproduce figures shown in Schlichting et al. JAMES. If you want to access the TXLA model output, see X. This repository is organized as follows:
-* analysis_notebooks: Contains Jupyter notebooks used to generate the figures and debugging
 * analysis_scripts: Contains scripts used to generate data for all non-tracer budget figures (i.e. histograms, Hovmoller diagrams)
 * budget_scripts: Contains scripts used to generate each term in the tracer budgets. Detailed description below.
 
