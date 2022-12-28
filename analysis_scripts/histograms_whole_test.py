@@ -1,3 +1,6 @@
+#Script to test whether computing PDFs all at once yields identical result to 
+#not setting 'density = True' from xhistogram. Compare results with 'histograms_whole.py'
+
 #Packages 
 import numpy as np
 import xgcm
@@ -104,47 +107,55 @@ strain_child = strain_norm_child.isel(eta_v = etaslicechild, xi_u = xislicechild
 sgradmag_rho_child = salinity_gradient_mag(ds_avg_child, grid_avg_child)
 sgradmag_child = sgradmag_rho_child.isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 
-#Compute the rms for each variable 
-def rms(y_load):
-    '''
-    Computes the root-mean square of an Xarray DataArray
-Inputs - 
-Loaded Xarray DataArray
-    '''
-    rms = np.sqrt(np.mean(y_load**2))
-    return rms 
+#Bin sizes for each variable: use 150 bins for each variable
+#Corresponding location of the parent model subset. See 'check_grid.ipynb' for more information
 
-rv_subset_parent = rv_parent[:,:,::3,::3]
-div_subset_parent = divergence_parent[:,:,::3,::3]
-strain_subset_parent = strain_parent[:,:,::3,::3]
-sgradmag_subset_parent = sgradmag_parent[:,:,::3,::3]
+rvortbins = np.linspace(-5,5,150)
+divbins = np.linspace(-5,5,150)
+strainbins = np.linspace(0,8,150)
+sgradbins = np.linspace(0,0.002,150)
 
-rv_subset_child = rv_child[:,:,::15,::15]
-div_subset_child = divergence_child[:,:,::15,::15]
-strain_subset_child = strain_child[:,:,::15,::15]
-sgradmag_subset_child = sgradmag_child[:,:,::15,::15]
+#Relative vorticity
+vort_hist = histogram(rvort_norm, bins = [rvortbins], density = True)
+vort_hist.name = 'rvort'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/rvort_whole_parent_2010_test.nc'
+vort_hist.to_netcdf(path, mode = 'w')
 
-rms_rv_parent = rms(rv_subset_parent.values)
-rms_rv_child = rms(rv_subset_child.values)
+vort_hist_child = histogram(rvort_norm_child, bins = [rvortbins], density = True)
+vort_hist_child.name = 'rvort'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/rvort_whole_child_2010_test.nc'
+vort_hist_child.to_netcdf(path, mode = 'w')
 
-rms_divergence_parent = rms(div_subset_parent.values)
-rms_divergence_child = rms(div_subset_child.values)
+#Divergence
+div_hist = histogram(divergence_norm, bins = [divbins], density = True)
+div_hist.name = 'div'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/divergence_whole_parent_2010_test.nc'
+div_hist.to_netcdf(path, mode = 'w')
 
-rms_strain_parent = rms(strain_subset_parent.values)
-rms_strain_child = rms(strain_subset_child.values)
+div_hist_child = histogram(divergence_norm_child, bins = [divbins], density = True)
+div_hist_child.name = 'div'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/divergence_whole_child_2010_test.nc'
+div_hist_child.to_netcdf(path, mode = 'w')
 
-rms_sgradmag_parent = rms(sgradmag_subset_parent.values)
-rms_sgradmag_child = rms(gradmag_subset_child.values)
+#Strain
+strain_hist = histogram(strain_norm, bins = [strainbins], density = True)
+strain_hist.name = 'strain'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/strain_whole_parent_2010_test.nc'
+strain_hist.to_netcdf(path, mode = 'w')
 
-#Save to numpy arrays 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_parent_rv_rms.npy', rms_rv_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_child_rv_rms.npy', rms_rv_child)
+strain_hist_child = histogram(strain_norm_child, bins = [strainbins], density = True)
+strain_hist_child.name = 'strain'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/strain_whole_child_2010_test.nc'
+strain_hist_child.to_netcdf(path, mode = 'w')
 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_parent_div_rms.npy', rms_divergence_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_child_div_rms.npy', rms_divergence_child)
+#Salinity gradient magnitude
+sgradmag_rho_hist = histogram(sgradmag_rho, bins = [sgradbins], density = True)
+sgradmag_rho_hist.name = 'sgradmag'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/sgradmag_rho_whole_parent_2010_test.nc'
+sgradmag_rho_hist.to_netcdf(path, mode = 'w')
 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_parent_strain_rms.npy', rms_strain_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_child_strain_rms.npy', rms_strain_child)
+sgradmag_rho_hist_child = histogram(sgradmag_rho_child, bins = [sgradbins], density = True)
+sgradmag_rho_hist_child.name = 'sgradmag'
+path = '/d2/home/dylan/JAMES/histogram_outputs/whole_test/sgradmag_rho_whole_child_2010_test.nc'
+sgradmag_rho_hist_child.to_netcdf(path, mode = 'w')
 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_parent_sgradmag_rms.npy', rms_sgradmag_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/whole/stats/relvort_whole_subset_child_sgradmag_rms.npy', rms_sgradmag_child)

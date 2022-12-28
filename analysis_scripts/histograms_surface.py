@@ -1,3 +1,6 @@
+#Compute surface histograms for vertical relative vorticity, divergence, strain, and horizontal salinity gradient magnitude
+#We construct histograms in chunks of time due to computational constraints then discreetly calculate the PDF afterwords. 
+
 #Packages 
 import numpy as np
 import xgcm
@@ -219,16 +222,16 @@ strain_parent.name = 'strain'
 strain_child = surface_strain(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild)
 strain_child.name = 'strain'
 
-# print('Saving strain')
-# for d in range(len(daterange)):
-#     strain_hist_parent = histogram(strain_parent.sel(ocean_time = daterange[d]), bins = [strainbins], density = False)
-#     strain_hist_parent.name = 'strain_histogram'
+print('Saving strain')
+for d in range(len(daterange)):
+    strain_hist_parent = histogram(strain_parent.sel(ocean_time = daterange[d]), bins = [strainbins], density = False)
+    strain_hist_parent.name = 'strain_histogram'
     
-#     strain_hist_child = histogram(strain_child.sel(ocean_time = daterange[d]), bins = [strainbins], density = False)
-#     strain_hist_child.name = 'strain_histogram'
+    strain_hist_child = histogram(strain_child.sel(ocean_time = daterange[d]), bins = [strainbins], density = False)
+    strain_hist_child.name = 'strain_histogram'
     
-#     path = '/d2/home/dylan/JAMES/histogram_outputs/surface_widerbins/strain_parent_final_'+str(d)+'.nc'
-#     strain_hist_parent.to_netcdf(path)
+    path = '/d2/home/dylan/JAMES/histogram_outputs/surface_widerbins/strain_parent_final_'+str(d)+'.nc'
+    strain_hist_parent.to_netcdf(path)
     
-#     path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_widerbins/strain_child_final_'+str(d)+'.nc'
-#     strain_hist_child.to_netcdf(path1)
+    path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_widerbins/strain_child_final_'+str(d)+'.nc'
+    strain_hist_child.to_netcdf(path1)

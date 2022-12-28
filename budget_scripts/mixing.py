@@ -1,6 +1,6 @@
 '''
 Computes the volume integrated numerical and physical mixing for the 
-native TXLA model.
+native TXLA model. Change path depending on whether hourly, 30min, or 10min output is desired. 
 '''
 #Packages 
 import numpy as np

@@ -17,7 +17,9 @@ path = glob.glob('/d1/shared/TXLA_ROMS/numerical_mixing/nest/ver1/ocean_avg_chil
 ds_avg_child = xroms.open_mfnetcdf(path)
 ds_avg_child, grid_avg_child = xroms.roms_dataset(ds_avg_child)
 
-#Corresponding location of the parent model subset. See 'check_grid.ipynb' for more information
+#Corresponding location of the parent model subset. See 'check_grid.ipynb' for more information.
+#The quantities here are on the psi points, which is off by one index compared to the tracer budgets,
+#but this doesn't impact the histograms
 xisliceparent = slice(271,404)
 etasliceparent = slice(31,149)
 xislicechild = slice(8,677-8)
@@ -40,7 +42,7 @@ ds_avg_parent = ds_avg_parent.where(ds_avg_child.ocean_time==ds_avg_parent.ocean
 rvortbins = np.linspace(-5,5,150)
 divbins = np.linspace(-5,5,150)
 strainbins = np.linspace(0,8,150)
-sgradbins = np.linspace(0,0.002,150)
+sgradbins = np.linspace(0,0.002,150) # 2 psu / km 
 
 def surface_vorticity(ds, grid):
     '''
@@ -143,61 +145,68 @@ sgradmag: horizontal salinity gradient magnitude on the psi points
     
     return sgradmag
 
-
 #Compute the surface salinity gradient magnitude
-sgradmag_surf_parent = surface_saltgradmag(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent)
+sgradmag_surf_parent = surface_saltgradmag(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 sgradmag_surf_parent.name = 'sgradmag'
-sgradmag_surf_child = surface_saltgradmag(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild)
+sgradmag_surf_child = surface_saltgradmag(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 sgradmag_surf_child.name = 'sgradmag'
 
 #Compute the surface vorticity
-rv_surf_parent = surface_vorticity(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent)
+rv_surf_parent = surface_vorticity(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 rv_surf_parent.name = 'rvort'
-rv_surf_child = surface_vorticity(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild)
+rv_surf_child = surface_vorticity(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 rv_surf_child.name = 'rvort'
-    
-#Compute surface vorticity and strain
-divergence_parent = surface_divergence(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent)
+
+divergence_parent = surface_divergence(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 divergence_parent.name = 'divergence'
-divergence_child = surface_divergence(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild)
+divergence_child = surface_divergence(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 divergence_child.name = 'divergence'
 
-strain_parent = surface_strain(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent)
+strain_parent = surface_strain(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 strain_parent.name = 'strain'
-strain_child = surface_strain(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild)
+strain_child = surface_strain(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 strain_child.name = 'strain'
 
-#Compute the rms for each variable 
-def rms(y_load):
-    '''
-    Computes the root-mean square of an Xarray DataArray
-Inputs - 
-Loaded Xarray DataArray
-    '''
-    rms = np.sqrt(np.mean(y_load**2))
-    return rms 
+#Now sort all values based on cyclonic vorticity associated with fronts, i.e. zeta/f > 1. 
+# rv_pos_parent = rv_surf_parent.where(rv_surf_parent>1)
+div_pos_parent = divergence_parent.where(rv_surf_parent>1)
+strain_pos_parent = strain_parent.where(rv_surf_parent>1)
+sgradmag_pos_parent = sgradmag_surf_parent.where(rv_surf_parent>1)
 
-rms_rv_parent = rms(rv_subset_parent.values)
-rms_rv_child = rms(rv_subset_child.values)
+# rv_pos_child = rv_surf_child.where(rv_surf_child>1)
+div_pos_child = divergence_child.where(rv_surf_child>1)
+strain_pos_child = strain_child.where(rv_surf_child>1)
+sgradmag_pos_child = sgradmag_surf_child.where(rv_surf_child>1)
 
-rms_divergence_parent = rms(div_subset_parent.values)
-rms_divergence_child = rms(div_subset_child.values)
+#Divergence
+div_hist = histogram(div_pos_parent, bins = [divbins], density = True)
+div_hist.name = 'div'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/divergence_surface_parent_2010_fronts.nc'
+div_hist.to_netcdf(path, mode = 'w')
 
-rms_strain_parent = rms(strain_subset_parent.values)
-rms_strain_child = rms(strain_subset_child.values)
+div_hist_child = histogram(div_pos_child, bins = [divbins], density = True)
+div_hist_child.name = 'div'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/divergence_surface_child_2010_fronts.nc'
+div_hist_child.to_netcdf(path, mode = 'w')
 
-rms_sgradmag_parent = rms(sgradmag_subset_parent.values)
-rms_sgradmag_child = rms(gradmag_subset_child.values)
+#Strain
+strain_hist = histogram(strain_pos_parent, bins = [strainbins], density = True)
+strain_hist.name = 'strain'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/strain_surface_parent_2010_fronts.nc'
+strain_hist.to_netcdf(path, mode = 'w')
 
-#Save to numpy arrays 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_rv_rms.npy', rms_rv_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_rv_rms.npy', rms_rv_child)
+strain_hist_child = histogram(strain_pos_child, bins = [strainbins], density = True)
+strain_hist_child.name = 'strain'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/strain_surface_child_2010_fronts.nc'
+strain_hist_child.to_netcdf(path, mode = 'w')
 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_div_rms.npy', rms_divergence_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_div_rms.npy', rms_divergence_child)
+#Salinity gradient magnitude - psi points
+sgradmag_rho_hist = histogram(sgradmag_pos_parent, bins = [sgradbins], density = True)
+sgradmag_rho_hist.name = 'sgradmag'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/sgradmag_rho_surface_parent_2010_fronts.nc'
+sgradmag_rho_hist.to_netcdf(path, mode = 'w')
 
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_strain_rms.npy', rms_strain_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_strain_rms.npy', rms_strain_child)
-
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_sgradmag_rms.npy', rms_sgradmag_parent)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_sgradmag_rms.npy', rms_sgradmag_child)
+sgradmag_rho_hist_child = histogram(sgradmag_pos_child, bins = [sgradbins], density = True)
+sgradmag_rho_hist_child.name = 'sgradmag'
+path = '/d2/home/dylan/JAMES/histogram_outputs/fronts/sgradmag_rho_surface_child_2010_fronts.nc'
+sgradmag_rho_hist_child.to_netcdf(path, mode = 'w')

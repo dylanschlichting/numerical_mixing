@@ -17,7 +17,9 @@ path = glob.glob('/d1/shared/TXLA_ROMS/numerical_mixing/nest/ver1/ocean_avg_chil
 ds_avg_child = xroms.open_mfnetcdf(path)
 ds_avg_child, grid_avg_child = xroms.roms_dataset(ds_avg_child)
 
-#Corresponding location of the parent model subset. See 'check_grid.ipynb' for more information
+#Corresponding location of the parent model subset. See 'check_grid.ipynb' for more information.
+#The quantities here are on the psi points, which is off by one index compared to the tracer budgets,
+#but this doesn't impact the histograms
 xisliceparent = slice(271,404)
 etasliceparent = slice(31,149)
 xislicechild = slice(8,677-8)
@@ -35,6 +37,12 @@ ds_avg_child = ds_avg_child.where((ds_avg_child.ocean_time!= timedrop[0])
                                    drop=True)
 
 ds_avg_parent = ds_avg_parent.where(ds_avg_child.ocean_time==ds_avg_parent.ocean_time)
+
+#Bin sizes for each variable: use 150 bins for each variable
+rvortbins = np.linspace(-5,5,150)
+divbins = np.linspace(-5,5,150)
+strainbins = np.linspace(0,8,150)
+sgradbins = np.linspace(0,0.002,150) # 2 psu / km 
 
 def surface_vorticity(ds, grid):
     '''
@@ -143,97 +151,66 @@ sgradmag_surf_parent.name = 'sgradmag'
 sgradmag_surf_child = surface_saltgradmag(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 sgradmag_surf_child.name = 'sgradmag'
 
+sgradmag_hist_parent = histogram(sgradmag_surf_parent, bins = [sgradbins], density = True)
+sgradmag_hist_parent.name = 'sgradmag_histogram'
+
+sgradmag_hist_child = histogram(sgradmag_surf_child, bins = [sgradbins], density = True)
+sgradmag_hist_child.name = 'sgradmag_histogram'
+
+path = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/sgradmag_parent_final.nc'
+sgradmag_hist_parent.to_netcdf(path)
+
+path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/sgradmag_child_final.nc'
+sgradmag_hist_child.to_netcdf(path1)
+
 #Compute the surface vorticity
 rv_surf_parent = surface_vorticity(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 rv_surf_parent.name = 'rvort'
 rv_surf_child = surface_vorticity(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 rv_surf_child.name = 'rvort'
-    
-#Compute surface vorticity and strain
+
+rv_hist_parent = histogram(rv_surf_parent, bins = [rvortbins], density = True)
+rv_hist_parent.name = 'rel_vort_histogram'
+
+rv_hist_child = histogram(rv_surf_child, bins = [rvortbins], density = True)
+rv_hist_child.name = 'rel_vort_histogram'
+
+path = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/rvort_parent_final.nc'
+rv_hist_parent.to_netcdf(path)
+
+path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/rvort_child_final.nc'
+rv_hist_child.to_netcdf(path1)
+
 divergence_parent = surface_divergence(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 divergence_parent.name = 'divergence'
 divergence_child = surface_divergence(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 divergence_child.name = 'divergence'
+
+div_hist_parent = histogram(divergence_parent, bins = [divbins], density = True)
+div_hist_parent.name = 'div_histogram'
+
+div_hist_child = histogram(divergence_child, bins = [divbins], density = True)
+div_hist_child.name = 'div_histogram'
+
+path = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/div_parent_final.nc'
+div_hist_parent.to_netcdf(path)
+
+path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/div_child_final.nc'
+div_hist_child.to_netcdf(path1)
 
 strain_parent = surface_strain(ds_avg_parent, grid_parent).isel(eta_v = etasliceparent, xi_u = xisliceparent).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 strain_parent.name = 'strain'
 strain_child = surface_strain(ds_avg_child, grid_avg_child).isel(eta_v = etaslicechild, xi_u = xislicechild).sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 strain_child.name = 'strain'
 
-#Compute median and standard deviation for the parent model
-newdims_parent = len(rv_surf_parent.ocean_time)*len(rv_surf_parent.xi_u)*len(rv_surf_parent.eta_v)
-rvnew = np.reshape(np.array(rv_surf_parent), (newdims_parent), order = 'F')
+strain_hist_parent = histogram(strain_parent, bins = [strainbins], density = True)
+strain_hist_parent.name = 'strain_histogram'
 
-rvmean = np.mean(rvnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_mean.npy', rvmean)
-rvmedian = np.median(rvnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_median.npy', rvmedian)
-rvstd = np.std(rvnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_parent_std.npy', rvstd)
+strain_hist_child = histogram(strain_child, bins = [strainbins], density = True)
+strain_hist_child.name = 'strain_histogram'
 
-divnew = np.reshape(np.array(divergence_parent), (newdims_parent), order = 'F')
+path = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/strain_parent_final.nc'
+strain_hist_parent.to_netcdf(path)
 
-divmean = np.mean(divnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_parent_mean.npy', divmean)
-# divmedian = np.median(divnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_parent_median.npy', divmedian)
-# divstd = np.std(divnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_parent_std.npy', divstd)
-
-sgradmag_surfnew = np.reshape(np.array(sgradmag_surf_parent), (newdims_parent), order = 'F')
-
-sgradmagmean = np.mean(sgradmag_surfnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_parent_mean.npy', sgradmagmean)
-# sgradmagmedian = np.median(sgradmag_surfnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_parent_median.npy', sgradmagmedian)
-# sgradmagstd = np.std(sgradmag_surfnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_parent_std.npy', sgradmagstd)
-
-strainnew = np.reshape(np.array(strain_parent), (newdims_parent), order = 'F')
-
-strainmean = np.mean(strainnew)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_parent_mean.npy', strainmean)
-# strainmedian = np.median(strainnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_parent_median.npy', strainmedian)
-# strainstd = np.std(strainnew)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_parent_std.npy', strainstd)
-
-#Compute median and standard deviation for the child model 
-
-newdims_child = len(rv_surf_child.ocean_time)*len(rv_surf_child.xi_u)*len(rv_surf_child.eta_v)
-
-rvnew_child = np.reshape(np.array(rv_surf_child), (newdims_child), order = 'F')
-
-rvmean_child = np.mean(rvnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_mean.npy', rvmean_child)
-# rvmedian_child = np.median(rvnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_median.npy', rvmedian_child)
-# rvstd_child = np.std(rvnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/relvort_surface_child_std.npy', rvstd_child)
-
-divnew_child = np.reshape(np.array(divergence_child), (newdims_child), order = 'F')
-
-divmean_child = np.mean(divnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_child_mean.npy', divmean_child)
-# divmedian_child = np.median(divnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_child_median.npy', divmedian_child)
-# divstd_child = np.std(divnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/divergence_surface_child_std.npy', divstd_child)
-
-sgradmag_surfnew_child = np.reshape(np.array(sgradmag_surf_child), (newdims_child), order = 'F')
-
-sgradmagmean_child = np.mean(sgradmag_surfnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_child_mean.npy', sgradmagmean_child)
-# sgradmagmedian_child = np.median(sgradmag_surfnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_child_median.npy', sgradmagmedian_child)
-# sgradmagstd_child = np.std(sgradmag_surfnew_child)
-# np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/sgradmag_surface_child_std.npy', sgradmagstd_child)
-
-strainnew_child = np.reshape(np.array(strain_child), (newdims_child), order = 'F')
-
-strainmean_child = np.mean(strainnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_child_mean.npy', strainmean_child)
-strainmedian_child = np.median(strainnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_child_median.npy', strainmedian_child)
-strainstd_child = np.std(strainnew_child)
-np.save('/d2/home/dylan/JAMES/histogram_outputs/surface/stats/strain_surface_child_std.npy', strainstd_child)
+path1 = '/d2/home/dylan/JAMES/histogram_outputs/surface_test/strain_child_final.nc'
+strain_hist_child.to_netcdf(path1)
