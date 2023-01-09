@@ -1,4 +1,4 @@
-# `JAMES_numerical_mixing`
+# `numerical_mixing`
 
 JAMES_numerical_mixing contains some of the information needed to reproduce figures shown in Schlichting et al. JAMES. If you want to access the TXLA model output, see https://pong.tamu.edu/thredds/catalog/catalog.html. This repository is organized as follows:
 * analysis_scripts: Contains scripts used to generate data for non-tracer budget figures (i.e. histograms)
@@ -7,7 +7,7 @@ JAMES_numerical_mixing contains some of the information needed to reproduce figu
 * quality_control: Contains a mix of notebooks and scripts to debug and verify various calculations. Detailed description below.  
 
 ## Installation
-A list of all packages for the conda environment used in the initial submission is shown in "copano_env_initial.yml". The revised submission is shown in "copano_env_revised.yml" The crux of the work done here relies on xroms. See https://github.com/xoceanmodel for more information. xroms is not required for analysis but it will help avoid re-inventing the wheel when it comes to cumbersome calculations like Jacobians or the nonlinear equation of state for seawater density. Without it, much of the analysis code used in the manuscript would double in length (at minimum). xroms is actively under development so syntax shown in this repository may not be applicable in the future! The easiest way to debug or avoid version control issues is to make an environment exclusively for xroms. Note that the environments uploaded here are not optimized and can trimmed to remove packages not relevant to the manuscript. 
+A list of all packages for the conda environment used in the initial submission is shown in "copano_env_initial.yml". The revised submission is shown in "copano_env_revised.yml" The crux of the work done here relies on xroms. See https://github.com/xoceanmodel for more information. xroms is not required for analysis but it will help avoid re-inventing the wheel when it comes to cumbersome calculations like Jacobians or the nonlinear equation of state for seawater density. Without it, much of the analysis code used in the manuscript would double in length (at minimum). xroms is actively under development so syntax shown in this repository may not be applicable in the future! The easiest way to debug or avoid version control issues is to make an environment exclusively for xroms. Note that the environments uploaded here are not optimized and can trimmed to remove packages not relevant to the manuscript.
 
 ## Budget_scripts: All scripts use xroms to open the model ouput, then subset each variable to the location of the two-way nested grid. To check that the grids are aligned, see /analysis_notebooks/grid_sanity_check.ipynb. Each script saves the variable of interest one day at a time in a for loop to avoid crashing the cluster.
  * advection.py: Calculates volume integrated tracer advection terms
