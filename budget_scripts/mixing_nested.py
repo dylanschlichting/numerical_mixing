@@ -1,3 +1,7 @@
+'''
+Computes the volume integrated numerical and physical mixing for the 
+nested TXLA model. Change path depending on whether hourly, 30min, or 10min output is desired. 
+'''
 #Packages 
 import numpy as np
 import xgcm
@@ -16,11 +20,13 @@ ds_avg, grid = xroms.roms_dataset(ds_avg)
 xislice = slice(8, 677-8)
 etaslice = slice(8, 602-8)
 
-#Resolved mixing
-chi_online = (ds_avg.AKr*ds_avg.dV_w).isel(eta_rho = etaslice, xi_rho = xislice).sum(['eta_rho', 'xi_rho', 's_w'])
+#Resolved mixing. Need to interpolate from the w to the rho points 
+#for consistency. 
+Akr_rho = grid.interp(ds_avg.AKr, 'Z', boundary = 'extend')
+chi_online = (AKr_rho*ds_avg.dV).isel(eta_rho = etaslice, xi_rho = xislice).sum(['eta_rho', 'xi_rho', 's_rho'])
 chi_online.attrs = ''
 
-#Numerical mixing
+#Numerical mixing - dye_03 in ROMS syntax. 
 mnum_online = (ds_avg.dye_03*ds_avg.dV).isel(eta_rho = etaslice, xi_rho = xislice).sum(['eta_rho', 'xi_rho', 's_rho'])
 mnum_online.attrs = ''
 
@@ -29,9 +35,9 @@ def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
         
+#Save outputs to netcdf. Save every two hours to avoid cluster crashing.
 print('saving outputs')
 daterange = list(chunks(ds_avg.ocean_time.sel(ocean_time = slice('2010-06-03', '2010-07-13')), 2))
-print('Saving sgradmag histograms')
 for d in range(len(daterange)):
     chi_online_sel = chi_online.sel(ocean_time = daterange[d])
     chi_online_sel.name = 'chi_online'

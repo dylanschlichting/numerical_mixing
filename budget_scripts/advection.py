@@ -1,15 +1,15 @@
 '''
-Computes the volume integrated advective fluxes of salt squared, volume
+Computes the advective fluxes of salt squared, volume
 mean salinity variance, volume averaged salinity variance, and cross-
 advection for a 3D control volume over the TXLA shelf corresponding
 to the location of the nested grid. 
 
 See Theory Section of Schlichting et al. for the typesetted definitions.
 Notes:
-salt squared: \iint_{A_l} (us^2) \cdot dA
-volume-mean salinity variance: \iint_{A_l} (us^{\prime^2}) \cdot dA
-volume averaged salinity squared: \overline{s}^2 \iint_{A_l} (us) \cdot dA
-cross-advection: \overline{s} \iint_{A_l} (us^\prime) \cdot dA
+salt squared: \iint_{A_l} (us^2) \cdot \hat{n} dA
+volume-mean salinity variance: \iint_{A_l} (us^{\prime^2}) \cdot \hat{n} dA
+volume averaged salinity squared: \overline{s}^2 \iint_{A_l} (us) \cdot \hat{n} dA
+cross-advection: \overline{s} \iint_{A_l} (us^\prime) \cdot \hat{n} dA
 '''
 #Packages 
 import numpy as np
@@ -47,6 +47,8 @@ Output:
 Qds: Xarray dataset of volume flux at the four horizontal control surfaces
 vol_adv: Xarray dataarray of the net volume flux as a function of time only
     '''
+    #-1 on the starting slices for u and v points to align the grid
+    #Look at classical picture of ROMS C-grid to reason this out
     uflux = ds.Huon.isel(eta_rho = etaslice, xi_u = slice(xislice.start-1, xislice.stop))
     vflux = ds.Hvom.isel(eta_v = slice(etaslice.start-1, etaslice.stop), xi_rho = xislice)
 
@@ -63,6 +65,8 @@ vol_adv: Xarray dataarray of the net volume flux as a function of time only
 
     Qds = xr.merge([QW, QE, QN, QS], compat='override')
     
+    #Note the negative sign here is placed so fluxes out of the control volume
+    #are considered positive
     vol_adv = -(Qds.QW.sum(['eta_rho', 's_rho'])-Qds.QE.sum(['eta_rho', 's_rho']) \
                  +Qds.QS.sum(['xi_rho', 's_rho'])-Qds.QN.sum(['xi_rho', 's_rho']))
         
@@ -70,7 +74,7 @@ vol_adv: Xarray dataarray of the net volume flux as a function of time only
 
 def salt_cv(ds, grid, xislice, etaslice):
     '''
-Computes the boundary salinity of a control volume for ROMS model output. 
+Computes the boundary salt advection of a control volume for ROMS model output. 
 -----
 Input: 
 ds - xarray roms dataset
@@ -79,12 +83,13 @@ xislice - slice object of desired xi points
 etaslice -slice object of desired eta points
 -----
 Output:
-saltds: Xarray dataset of salinity at the four horizontal control surfaces. 
+saltds: xarray dataset of salinity at the four horizontal control surfaces. 
 
 Notes: 
 ------
 Interpolate the salt to the u and v points first, then slice the boundaries
     '''    
+    #grid.interp is a linear interpolation, see xgcm documentation
     su = grid.interp(ds.salt, 'X')
     sv = grid.interp(ds.salt, 'Y')
 
@@ -116,12 +121,11 @@ xislice - slice object of desired xi points
 etaslice -slice object of desired eta points
 -----
 Output:
-saltds: Xarray dataset of salinity at the four horizontal control surfaces. 
-
-Notes:
+salt2ds: xarray dataset of salinity at the four horizontal control surfaces. 
 -----
-Square the salt, then interpolate. Could do the other way around and this will 
-yield *slightly* different values, but not significant enough to change structure
+Notes:
+This could be combined into other functions, but we leave them as separate 
+to make debugging easier. 
     '''
     #Interpolate salt to the u and v points so that they can be multiplied by the volume fluxes
     su = grid.interp(ds.salt**2, 'X')
@@ -204,7 +208,6 @@ Need to compute sbar for the control volume, then the variance fluxes at the bou
     '''
     #Compute volume-averaged salinity
     dV = (ds.dV).isel(eta_rho = etaslice, xi_rho = xislice)
- 
     V = dV.sum(dim = ['eta_rho', 's_rho', 'xi_rho'])
     salt = ds.salt.isel(eta_rho = etaslice, xi_rho = xislice)
     sbar = (1/V)*(salt*dV).sum(dim = ['eta_rho', 'xi_rho','s_rho'])
@@ -247,6 +250,7 @@ sbarsprime_adv
 -----
 Notes: 
 sbarsprime_adv = -2*sbar*sprime, where sbar is the volume averaged salinity.
+Negative sign is applied above to make fluxes out of the volume positive
     '''
     #sbar first
     dV = ds.dV.isel(eta_rho = etaslice, xi_rho = xislice)
@@ -281,7 +285,8 @@ sbarsprime_adv = -2*sbar*sprime, where sbar is the volume averaged salinity.
 
 #-----------------------------
 #Run the functions defined above! Then remove all attributes, which eliminates the grid metrics
-#for saving to a .nc file. If you don't do that, it will raise an error when saving. 
+#for saving to a .nc file. If you don't do that, it will raise an error when saving. This is a really
+#irritating bug and will hopefully be patched soon.
 
 # Salinity for the four control surfaces 
 saltds = salt_cv(ds, grid, xislice, etaslice)
@@ -326,26 +331,31 @@ sbar2_adv.attrs = ''
 sbarprime_adv = Qsbarsprime2_advection(ds, xislice, etaslice, saltds, Qds)
 sbarprime_adv.attrs = ''
 
-#Subset the data and save to a netcdf every day. Note that this might have to be down or -up 
-#sampled depending on the laptop or cluster you use. 
+#Subset the data and save to a netcdf every day. We do this so calculations are not shoved
+#into a single file, which could easily crash if wifi is interrupted. How you decide to subset 
+#the data hereafter is based on your computer. If you're on a supercomputer and have lots of memory,
+#you could get away with less intermittent output, if you're on a laptop you might have to save every
+#couple hours instead of daily. 
 print('saving outputs')
 dates = np.arange('2010-06-03', '2010-07-15', dtype = 'datetime64[D]') 
 for d in range(len(dates)):    
     #Salt squared
     ssadv_xr_sel = ssadv_xr.sel(ocean_time = str(dates[d]))
+    ssadv_xr_sel.name = 's2_adv'
     path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltsquareadv_parent_ver1_2010_%s.nc' %d
 #     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/saltsquareadv_parent_2010_30min_%s.nc' %d
     # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/saltsquareadv_parent_2010_10min_%s.nc' %d
     ssadv_xr_sel.to_netcdf(path, mode = 'w')
 
-    #Salt anomaly squared
+    #Volume-mean salinity variance 
     svaradv_xr_sel = svaradv_xr.sel(ocean_time = str(dates[d]))
+    svaradv_xr_sel.name = 'sprime2_adv'
     path = '/d2/home/dylan/JAMES/budget_outputs/advection/saltvaradv_parent_ver1_2010_%s.nc' %d
 #     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/saltvaradv_parent_2010_30min_%s.nc' %d
     # path = '/d2/home/dylan/JAMES/budget_outputs/10min/advection/saltvaradv_parent_2010_10min_%s.nc' %d
     svaradv_xr_sel.to_netcdf(path, mode = 'w')
     
-    #Extra terms 
+    #Extra terms - sbar2 then cross-advective flux
     sbar2_adv_sel = sbar2_adv.sel(ocean_time = str(dates[d]))
     path = '/d2/home/dylan/JAMES/budget_outputs/advection/sbar2_advection_ver1_2010_%s.nc' %d
 #     path = '/d2/home/dylan/JAMES/budget_outputs/30min/advection/sbar2_advection_2010_30min_%s.nc' %d
