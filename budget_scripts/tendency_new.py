@@ -117,7 +117,7 @@ np.save('/d2/home/dylan/JAMES/budget_outputs/tendency/dsbar2dt_parent_ver1_2010.
 sprime = xr.open_mfdataset('/d2/home/dylan/JAMES/budget_outputs/tracers/sprime_ver1_2010_*.nc').sprime.sel(ocean_time = slice('2010-06-03', '2010-07-13'))
 sprimev = sprime*delta
 dsprimevdt = (((sprimev).values[2:] - (sprimev).values[:-2])/(2*3600))
-dsprimevdt_v =  dsprimevdt/(dV.values[1:-1])
+dsprimevdt_v =  dsprimevdt/(delta.values[1:-1])
 dsprimevdt_v_int = (2*sbar[1:-1,np.newaxis,np.newaxis,np.newaxis]*dsprimevdt_v*dV[1:-1]).sum(axis = (1,2,3))
 np.save('/d2/home/dylan/JAMES/budget_outputs/tendency/dsbarsprimedt1_parent_ver1_2010.npy', dsprimevdt_v_int)
 
