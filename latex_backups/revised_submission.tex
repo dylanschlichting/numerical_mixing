@@ -1,0 +1,1080 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% AGUJournalTemplate.tex: this template file is for articles formatted with LaTeX
+%
+% This file includes commands and instructions
+% given in the order necessary to produce a final output that will
+% satisfy AGU requirements, including customized APA reference formatting.
+%
+% You may copy this file and give it your
+% article name, and enter your text.
+%
+%
+% Step 1: Set the \documentclass
+%
+%
+
+%% To submit your paper:
+\documentclass[draft]{agujournal2019}
+\usepackage{url} %this package should fix any errors with URLs in refs.
+\usepackage{lineno}
+\usepackage[inline]{trackchanges} %for better track changes. finalnew option will compile document with changes incorporated.
+\usepackage{soul}
+\usepackage{amsmath}
+\linenumbers
+
+%%%%%%%
+% As of 2018 we recommend use of the TrackChanges package to mark revisions.
+% The trackchanges package adds five new LaTeX commands:
+%
+%  \note[editor]{The note}
+%  \annote[editor]{Text to annotate}{The note}
+%  \add[editor]{Text to add}
+%  \remove[editor]{Text to remove}
+%  \change[editor]{Text to remove}{Text to add}
+%
+% complete documentation is here: http://trackchanges.sourceforge.net/
+%%%%%%%
+
+\draftfalse
+
+%% Enter journal name below.
+%% Choose from this list of Journals:
+%
+% JGR: Atmospheres
+% JGR: Biogeosciences
+% JGR: Earth Surface
+% JGR: Oceans
+% JGR: Planets
+% JGR: Solid Earth
+% JGR: Space Physics
+% Global Biogeochemical Cycles
+% Geophysical Research Letters
+% Paleoceanography and Paleoclimatology
+% Radio Science
+% Reviews of Geophysics
+% Tectonics
+% Space Weather
+% Water Resources Research
+% Geochemistry, Geophysics, Geosystems
+% Journal of Advances in Modeling Earth Systems (JAMES)
+% Earth's Future
+% Earth and Space Science
+% Geohealth
+%
+% ie, \journalname{Water Resources Research}
+
+\journalname{Journal of Advances in Modeling Earth Systems}
+
+
+\begin{document}
+
+%% ------------------------------------------------------------------------ %%
+%  Title
+%
+% (A title should be specific, informative, and brief. Use
+% abbreviations only if they are defined in the abstract. Titles that
+% start with general keywords then specific terms are optimized in
+% searches)
+%
+%% ------------------------------------------------------------------------ %%
+
+% Example: \title{This is a test title}
+
+\title{Quantification of physical and numerical mixing in a coastal ocean model using salinity variance budgets}
+
+%% ------------------------------------------------------------------------ %%
+%
+%  AUTHORS AND AFFILIATIONS
+%
+%% ------------------------------------------------------------------------ %%
+
+% Authors are individuals who have significantly contributed to the
+% research and preparation of the article. Group authors are allowed, if
+% each author in the group is separately identified in an appendix.)
+
+% List authors by first name or initial followed by last name and
+% separated by commas. Use \affil{} to number affiliations, and
+% \thanks{} for author notes.
+% Additional author notes should be indicated with \thanks{} (for
+% example, for current addresses).
+
+% Example: \authors{A. B. Author\affil{1}\thanks{Current address, Antartica}, B. C. Author\affil{2,3}, and D. E.
+% Author\affil{3,4}\thanks{Also funded by Monsanto.}}
+
+\authors{Dylan Schlichting \affil{1}, Lixin Qu \affil{2}, Daijiro Kobashi \affil{1}, and Robert Hetland \affil{3}}
+\affiliation{1}{Department of Oceanography, Texas A$\&$M University, College Station, TX 77843}
+\affiliation{2}{School of Oceanography, Shanghai Jiao Tong University, Shanghai, China}
+\affiliation{3}{Pacific Northwest National Laboratory}
+%(repeat as many times as is necessary)
+
+%% Corresponding Author:
+% Corresponding author mailing address and e-mail address:
+
+% (include name and email addresses of the corresponding author.  More
+% than one corresponding author is allowed in this LaTeX file and for
+% publication; but only one corresponding author is allowed in our
+% editorial system.)
+
+% Example: \correspondingauthor{First and Last Name}{email@address.edu}
+
+\correspondingauthor{Dylan Schlichting}{dylan.schlichting@tamu.edu}
+\correspondingauthor{Lixin Qu}{lixinqu@sjtu.edu.cn}
+%% Keypoints, final entry on title page.
+
+%  List up to three key points (at least one is required)
+%  Key Points summarize the main points and conclusions of the article
+%  Each must be 140 characters or fewer with no special characters or punctuation and must be complete sentences
+
+% Example:
+% \begin{keypoints}
+% \item	List up to three key points (at least one is required)
+% \item	Key Points summarize the main points and conclusions of the article
+% \item	Each must be 140 characters or fewer with no special characters or punctuation and must be complete sentences
+% \end{keypoints}
+
+\begin{keypoints}
+\item We use offline salinity variance budgets to quantify numerical mixing due to the discretization of advection in a coastal ocean model.
+\item The volume-integrated numerical mixing is significant and exceeds the physical mixing for much of the simulation.
+\item The accuracy of the offline budgets is strongly dependent on the model output frequency.
+\end{keypoints}
+
+%% ------------------------------------------------------------------------ %%
+%
+%  ABSTRACT and PLAIN LANGUAGE SUMMARY
+%
+% A good Abstract will begin with a short description of the problem
+% being addressed, briefly describe the new data or analyses, then
+% briefly states the main conclusion(s) and how they are supported and
+% uncertainties.
+
+% The Plain Language Summary should be written for a broad audience,
+% including journalists and the science-interested public, that will not have 
+% a background in your field.
+%
+% A Plain Language Summary is required in GRL, JGR: Planets, JGR: Biogeosciences,
+% JGR: Oceans, G-Cubed, Reviews of Geophysics, and JAMES.
+% see http://sharingscience.agu.org/creating-plain-language-summary/)
+%
+%% ------------------------------------------------------------------------ %%
+
+%% \begin{abstract} starts the second page
+
+\begin{abstract}
+Numerical mixing, the spurious mixing primarily generated by the discretization of advection, is often significant in estuarine and coastal models due to sharp, energetic fronts. In this study, we compare on- and offline estimates of numerical mixing in a submesoscale-resolving realistic simulation of the ocean state over the Texas-Louisiana continental shelf. While offline estimates of numerical mixing differ from online estimates, offline methods may be the only analysis available. This study offers insight into the differences between the on- and offline methods. We use two methods to estimate numerical mixing offline, based on salinity squared $s^2$ and volume-mean salinity variance $s^{\prime^2}$. Numerical mixing estimated from the $s^{\prime^2}$ budget is generally within 60\% of the magnitude for the online method but captures the temporal variability well. However, the $s^2$ budget compares poorly due to larger truncation errors associated with the tendency and advection terms, which can be reduced by increasing the model output frequency. We also investigate the effects of horizontal resolution on numerical mixing using a two-way nested grid. The volume-integrated numerical mixing constitutes 57\% of the bulk physical mixing -- the mixing prescribed by the turbulence closure scheme -- in the coarse model and may exceed the physical mixing by half an order of magnitude. We find that numerical mixing is reduced by 35\% on average in the nested model, less than expected based on scaling of the numerical mixing for an upwind advection scheme, likely due to new dynamical processes that emerge in the nested simulation.
+\end{abstract}
+
+\section*{Plain Language Summary}
+\noindent Numerical models are powerful tools for studying the general circulation of the ocean, allowing us to examine the ocean's complex relationship with Earth's weather and climate in greater detail than observations allow. However, numerical ocean models are prone to several types of numerical errors because they represent physical processes with discrete approximations. One of these errors is numerical mixing, a process by which the discretized transport of tracers by currents generates spurious mixing. Recent studies suggest numerical mixing can be as large as the physical mixing prescribed by a parameterization, especially in regions with strong tracer gradients, such as in estuaries or the coastal ocean. In this study, we examine numerical mixing of salinity using a combination of on- and offline methods in a model of the ocean state over the Texas-Louisiana continental shelf in the Gulf of Mexico. Offline methods rely on existing model output and are often easier to implement than online methods, albeit at the cost of numerical accuracy, because online methods require modifying a model's source code and re-running it. We find that numerical mixing often exceeds the physical mixing and increasing the spatial resolution decreases the numerical mixing because the model better resolves small-scale processes.
+
+
+%% ------------------------------------------------------------------------ %%
+%
+%  TEXT
+%
+%% ------------------------------------------------------------------------ %%
+
+%%% Suggested section heads:
+% \section{Introduction}
+%
+% The main text should start with an introduction. Except for short
+% manuscripts (such as comments and replies), the text should be divided
+% into sections, each with its own heading.
+
+% Headings should be sentence fragments and do not begin with a
+% lowercase letter or number. Examples of good headings are:
+
+% \section{Materials and Methods}
+% Here is text on Materials and Methods.
+%
+% \subsection{A descriptive heading about methods}
+% More about Methods.
+%
+% \section{Data} (Or section title might be a descriptive heading about data)
+%
+% \section{Results} (Or section title might be a descriptive heading about the
+% results)
+%
+% \section{Conclusions}
+
+\section{Introduction}
+
+\subsection{Overview of mixing in numerical models}
+
+Mixing is an irreversible process that redistributes tracers and dissipates energy. In primitive equation ocean models, turbulence closure schemes are used to parameterize the physical mixing due to subgrid-scale turbulence. In addition to the prescribed physical mixing, spurious or numerical mixing may be generated by several sources, such as the discretization of the advective terms in the momentum and tracer equations \cite{Burchard_2008, gibson2017attribution, Griffies_2000, Smolarkiewicz_1983}, spurious convection due to grid-scale noise \cite{ilicak2016quantifying,Ilicak_2012}, and cabbeling that arises from the nonlinear equation of state for seawater density \cite{Ilicak_2012, mcdougall1987thermobaricity}. Numerical mixing induces spurious diffusion or anti-diffusion of tracer gradients, which affects the tracer distribution and may introduce biases in the tracer field. Numerical mixing is often significant in regions with strong velocity shear and tracer gradients \cite{Fringer_2019, Kalra_2019, Rennau_2009}, however, it is seldom quantified in realistic simulations of estuarine and coastal flows \cite{Broatch_2022, Ralston_2017, Wang_2021}.
+
+This study is focused on quantifying the magnitude of spurious mixing -- in particular, the numerical mixing generated by the discretization of tracer advection -- distinct from the prescribed mixing specified through mixing closure parameterizations regardless of the accuracy of these closure models; that is to say, spurious mixing that cannot be directly controlled by model configuration. For example, errors in physical mixing relative to a true ocean state may arise when using a grid or geopotential aligned horizontal diffusion tensor, instead of rotating the diffusion tensor to align with the isoneutral directions \cite{griffies1998isoneutral, redi1982oceanic}. However, a mixing tensor aligned with geopotentials is still something that is specified --  an explicit parameterization of unresolved processes, albeit poorly or incorrectly -- and can be controlled in the model setup; such parameterizations are therefore considered to be `prescribed', even if unphysical, for the purposes of this study.
+
+Characterizing numerical mixing in realistic simulations is difficult because of the time-dependent and stochastic nature of the flow structure. A number of numerical methods have been developed for quantifying numerical mixing online during the model run based on tracer variance dissipation \cite{Burchard_2008, Klingbeil_2014}, water mass transformation \cite{Holmes_2021, lee2002spurious, megann2018estimating}, and energetics \cite{Ilicak_2012, Petersen_2015, winters1995available}. However, online methods are not always practical because they require modifying a model's source code and rerunning it, or may be unavailable when downloading model output from an external source. Consequently, offline methods for quantifying numerical mixing based on tracer variance budgets have become increasingly popular among estuarine and coastal modelers \cite{Li_2018, MacCready_2018, Wang_2017, Wang_2021}, who often use salinity as the tracer of interest because it dominates the density structure in many coastal regions. Salinity distributions are also strongly controlled by lateral advection -- and thus more susceptible to errors in the advection scheme -- since salinity structure in coastal regions is primarily driven by lateral boundary conditions (e.g., rivers) rather than surface boundary conditions (e.g., precipitation and evaporation). For more information on the different methods for quantifying numerical mixing, see \citeA{Holmes_2021}.
+
+\subsection{Quantifying physical mixing}
+
+Physical mixing of salinity in the ocean can be defined as the dissipation of salinity variance, $\chi^s$, due to molecular processes \cite{Burchard_2009}, which is analogous to the dissipation of turbulent kinetic energy $\epsilon$ \cite{MacCready_2018}. $\epsilon$ represents the rate at which kinetic energy is dissipated by molecular viscosity and has units of velocity squared per unit time (m$^2$ s$^{-3}$). $\chi^s$ represents the rate at which variance in the salinity concentration is dissipated by molecular diffusion \cite{Nash_2002} and has units of salinity squared per unit time (g$^2$ kg$^{-2}$ s$^{-1}$). The molecular dissipation of salinity variance is assumed to be equal to, on average, the dissipation of Reynolds averaged salinity variance at the scales of the turbulent eddies \cite{Burchard_2008, Nash_2002, osborn1972oceanic}, and may be written as
+\begin{linenomath*} 
+\begin{equation} \label{eq:chi_whole}
+    \chi^s = 2 \overline{s^\prime \mathbf{u}^\prime} \cdot \nabla s = \underbrace{2\kappa_H \left[\left(\frac{\partial s}{\partial x}\right)^2 + \left(\frac{\partial s}{\partial y} \right)^2 \right]}_{\text{Horz. mixing $\chi_H^s$}}+\underbrace{2 \kappa_s \left(\frac{\partial s}{\partial z} \right)^2}_{\text{Vert. mixing $\chi_v^s$}}
+\end{equation}
+\end{linenomath*}
+where $s$ is the salinity, $\mathbf{u}$ is the 3D velocity vector, an overbar is used to denote a Reynolds average, and a prime is used to denote a perturbation from that average. The physical mixing resolved by a model is quantified as the dissipation of Reynolds averaged salinity variance with the eddy diffusivity $\kappa$. Due to the vast differences in the horizontal and vertical scales in the ocean, $\kappa$ is separated into horizontal ($\kappa_H$) and vertical ($\kappa_s$) components and thus requires different parameterizations. $\kappa_H$ is parameterized by the horizontal mixing scheme and $\kappa_s$ parameterized by the turbulence closure scheme \cite{Burchard_2008, MacCready_2018}. 
+
+In many estuarine and coastal models, if $\kappa_H$ is prescribed, it is often done with the smallest possible values to reduce spurious noise in the salinity field. Consequently, the horizontal mixing $\chi_H^s$ is often much smaller \cite{geyer2014estuarine} than the vertical mixing $\chi_v^s$, with some exceptions \cite<e.g.,>[]{Broatch_2022}. While this is different than many larger-scale ocean circulation models, we nevertheless consider the horizontal mixing as part of the physical mixing because it is prescribed, whereas numerical mixing is not something that can be directly controlled in the model setup. Generally, horizontal and vertical down-gradient closure models -- including parameterizations of vertical shear mixing, harmonic, and biharmonic lateral mixing - result in a positive definite $\chi^s$ that represents a sink of salinity variance.
+
+\subsection{Quantifying numerical mixing}
+
+Salinity variance budgets provide a means to quantify the bulk physical and numerical mixing within a control volume \cite{Li_2018, Lorenz_2021, Qu_2022_box}. Numerical models are designed to conserve salt, but not salinity variance, therefore numerical mixing is treated as an additional subgrid-scale term and quantified as the residual of the salinity variance budget \cite{MacCready_2018}. Salinity variance can be defined with or without reference to a volume mean \cite{Burchard_2008, Qu_2022_box}, with the former denoted hereinafter as the volume-mean salinity variance $s^{\prime^2} = (s-\overline{s})^2$, where $\overline{s}$ is the volume-averaged salinity $\frac{1}{V} \iiint s \, dV$, and the latter denoted as the salinity squared $s^2$. For example, consider a three-dimensional control volume with no external sources or sinks of volume-mean salinity variance (i.e., no surface salt fluxes or horizontal diffusive boundary fluxes). The numerical mixing $\mathcal{M}_{num}$ based on the volume-integrated $s^{\prime^2}$ budget is
+\begin{linenomath*}
+\begin{equation} \label{eq:svar_maccready}
+    \mathcal{M}_{num} = \mathcal{D} \biggl\{-\frac{d}{dt} \iiint_V s^{\prime^2} dV - \iint_{A_l} \mathbf{u}s^{\prime^2} \cdot \hat{\mathbf{n}} \,  dA - \iiint_V \chi^s \, dV \biggl\} \quad ,
+\end{equation}
+\end{linenomath*}
+where $\mathcal{D}$ denotes a generic discretization operator, $t$ denotes time, $V$ denotes the domain volume, $A_l$ denotes the area of the lateral control volume boundaries, $\mathbf{u}$ is the velocity normal to the open boundaries, $\hat{\mathbf{n}}$ is the outward pointing normal vector, and $\chi^s$ is the physical mixing as defined in the right hand side of Eq. \ref{eq:chi_whole}. Eq. \ref{eq:svar_maccready} is modified version of Eq. 3 of \citeA{MacCready_2018}. We have written the volume-mean salinity variance budget inside of a discretization operator because numerical mixing only appears as a consequence of numerical discretization. As with the physical mixing, the numerical mixing is assumed to be a sink of salinity variance (the reasons for this will become more apparent in Section \ref{sec:theory}), which is reflected in the sign convention of the right-hand-side terms. Eq. \ref{eq:svar_maccready} demonstrates that in the absence of diffusive fluxes, contributions from numerical mixing arise from the time rate of change of variance within the control volume, the advection of variance through the lateral boundaries, and the dissipation of variance due to physical mixing. 
+
+A salinity variance budget based on $s^{\prime^2}$ \cite{Li_2018} showed that the volume-mean salinity variance may be used as a tracer for the stratification within a control volume, an approach that inspired later studies \cite{Broatch_2022, Li_2021, Wang_2018}. Conversely, \citeA{Lorenz_2021} and \citeA{Burchard_2019} derived a series of approximate relations for the total mixing within a control volume based on the $s^2$ budget because it is easier to apply to model output and field observations than the $s^{\prime^2}$ budget. There are a number of examples where mixing within a control volume is estimated by the boundary fluxes. The bulk mixing $M$ in an estuary may be approximated as $M=s_{in}s_{out}Q_r$ \cite{Burchard_2019, Burchard_2020}, where $s_{in}$ and $s_{out}$ are the inflowing and outflowing salinities calculated with the total exchange flow (TEF) analysis framework \cite{MacCready_2011}, respectively, and $Q_r$ is the river discharge. Under the same assumptions, \citeA{Qu_2022_box} showed that $M$ be quantified directly in terms of the net boundary advection of salinity variance into the estuary. Due to the recent invention of the theory, TEF has only been applied to numerical model output. However, a recent paper by \citeA{Lemagie_2022} suggested how TEF may be measured with field observations. 
+
+Without a robust estimate of $\overline{s}$ for many estuaries and coastal regions, it may be feasible to only estimate the advective boundary fluxes of $s^2$. Consequently, there is a strong dynamical motivation to explore how $s^2$ and $s^{\prime^2}$ are related, especially if only $s^2$ is measurable for the foreseeable future and $s^{\prime^2}$ requires calculation with a numerical model. Despite the physical mixing being identical in the $s^2$ and $s^{\prime^2}$ budgets (since $\overline{s}$ has no spatial gradients), this is not necessarily true for other terms (e.g., advection) in their respective equations. This is particularly relevant for realistic control volumes characterized by unsteady flow, advective and diffusive lateral boundary fluxes, and surface salt fluxes caused by evaporation and precipitation. Therefore, it is unclear \textit{a priori} if the $s^2$ budget may be used to robustly estimate numerical salt mixing given possible dynamical differences with $s^{\prime^2}$, especially because they will have different numerical implementations when quantified with a numerical model.
+
+Offline computation of the salinity variance budgets introduces additional discretization errors that are dependent on the model output type (i.e., snapshots or averages), output frequency, and numerical methods used to compute any associated derivatives or integrals. Recently, \citeA{Wang_2021} examined the accuracy of the $s^{\prime^2}$ budget in a series of idealized and realistic simulations and suggested that the offline method agrees well qualitatively with the online diagnostic method of \citeA{Burchard_2008} when the model output frequency captures typical flow timescales (e.g., a gravity current). No studies to date, however, have examined the accuracy of the $s^2$ budget for quantifying numerical mixing. A heuristic argument can be made that the $s^2$ budget is subject to larger numerical error than the $s^{\prime^2}$ budget because $s^2$ is generally much larger than $s^{\prime^2}$ unless the system experiences strong, time-dependent stratification (e.g., in the case of a salt-wedge estuary). Therefore, it is useful to investigate whether this error significantly impacts the accuracy of the numerical mixing associated with $s^2$ and $s^{\prime^2}$. 
+
+\subsection{Objectives of this paper}
+
+Acknowledging the importance of numerical mixing in estuarine and coastal models, the primary goal of this study is to expand the work of \citeA{Wang_2021} by examining the accuracy of the volume-integrated $s^2$ and $s^{\prime^2}$ budgets for quantifying numerical mixing within a control volume. We assess the accuracy of the offline budgets by comparing the results with the online method of \citeA{Burchard_2008}. We use a subset of a submesoscale-resolving ocean model of the Texas-Louisiana (TXLA) continental shelf in the northern Gulf of Mexico (nGoM) during summer as a case study, where the density field is dominated by salinity variations due to freshwater input from the Mississippi and Atchafalaya (M/A) rivers.
+
+We find that numerical mixing constitutes a significant fraction of the total mixing (physical+numerical) and exceeds the physical mixing for much of the simulation due to strong lateral salinity gradients generated by freshwater input from the M/A rivers, motivating us to use a two-way nested child model with five times the native parent resolution to test the sensitivity of numerical mixing to horizontal grid resolution. The volume-averaged salinity remains above 33 g kg$^{-1}$ and varies by less than 1 g kg$^{-1}$ throughout the study period, resulting in volume-averaged $s^{\prime^2}$ that is approximately two orders of magnitude smaller than the volume-averaged $s^2$. We show that this has important ramifications for the accuracy of the offline method and the $s^2$ budget experiences much larger numerical error compared to the $s^{\prime^2}$ budget, which can be improved by increasing the model output frequency, albeit at the cost of increased computational resources. 
+
+\section{Theory} \label{sec:theory}
+
+We derive volume-integrated budget equations for salinity squared $s^2$ and volume-mean salinity variance $s^{\prime^2}$ to analyze the total mixing within a control volume. The derivation is similar to \citeA{Lorenz_2021}, who derived $s^2$ and $s^{\prime^2}$ budgets applied to a realistic estuarine domain. In the case presented here, the salinity surface and bottom boundary conditions are modified for the model used in this study \cite<Regional Ocean Modeling Systems, ROMS,>[]{shchepetkin2005regional}. A rigorous exploration of the differences between the $s^2$ and $s^{\prime^2}$ budgets in the context of numerical mixing is included. 
+
+\subsection{Salinity squared budget}
+
+Consider a three-dimensional control volume with four open lateral boundaries and an open boundary at the sea surface. We start with Reynolds-averaged salinity conservation in Cartesian coordinates:
+\begin{linenomath*}
+\begin{equation} \label{eq:salt_local}
+    \frac{\partial s}{\partial t}+ \textbf{u} \cdot \nabla s =\nabla_H \cdot (\kappa_H \nabla_H s)+  \frac{\partial}{\partial z} \left(\kappa_s {\frac{\partial s}{\partial z}} \right) \quad ,
+\end{equation}
+\end{linenomath*}
+where $\mathbf{u}$ is redefined as the 3D velocity vector. To derive volume-integrated budgets of $s^2$ and $s^{\prime^2}$, we first consider the local salinity boundary conditions. ROMS parameterizes surface volume fluxes due to evaporation and precipitation as surface salt fluxes (i.e., a virtual salt flux), which is to say no water is added or taken away from the domain \cite{nagy2020regional, roullet2000salt, shchepetkin2005regional}, so the corresponding surface and bottom boundary conditions are
+\begin{linenomath*}
+\begin{align} \label{eq:salt_bcs}
+    \begin{split}
+        & \kappa_s \left({\frac{\partial s}{\partial z}} \right) = s(E-P) \,\, \textrm{at} \,\, z = \zeta \\
+        & \kappa_s \left({\frac{\partial s}{\partial z}} \right) = 0 \,\, \textrm{at} \,\, z = -h \quad , \\
+    \end{split}
+\end{align} 
+\end{linenomath*}
+where $E$ and $P$ are the evaporation and precipitation per unit area, respectively, $\zeta$ is the free surface elevation, and $h$ is the depth of the ocean bottom below mean sea level. To derive an equation for $s^2$ and the accompanying boundary conditions, we multiply Eqs. \ref{eq:salt_local}-\ref{eq:salt_bcs} by $2s$ and apply the product rule:
+\begin{linenomath*}
+\begin{equation} \label{eq:s2_local}
+    \frac{\partial s^2}{\partial t} + \textbf{u} \cdot \nabla s^2   = \nabla_H \cdot (\kappa_H \nabla_H s^2) + \frac{\partial }{\partial z}\left(\kappa_s \left(\frac{\partial s^2}{\partial z} \right) \right) - 2\kappa_H(\nabla_H s)^2 -2\kappa_s \left(\frac{\partial s}{\partial z} \right)^2 \quad ,
+\end{equation}
+\end{linenomath*}
+\begin{linenomath*}
+\begin{align} 
+    \begin{split}
+        & \kappa_s \left({\frac{\partial s^2}{\partial z}} \right) = 2s^2(E-P) \,\, \textrm{at} \,\, z = \zeta \\
+        & \kappa_s \left({\frac{\partial s^2}{\partial z}} \right) = 0 \,\, \textrm{at} \,\, z = -h \label{eq:salt2_bcs} \quad ,
+    \end{split}
+\end{align}
+\end{linenomath*}
+where the third and fourth terms on the right-hand-side are the dissipation of salinity variance $\chi^s$ as defined in Eq. \ref{eq:chi_whole} \cite{Burchard_2008}. To form a volume-integrated budget for $s^2$, we integrate Eqs. \ref{eq:s2_local}-\ref{eq:salt2_bcs} over the domain:
+\begin{linenomath*}
+\begin{equation} \label{eq:salt2_vint}
+    \begin{split}
+        \underbrace{\iiint_V \frac{\partial s^2}{\partial t}  dV}_{\text{Tendency}} + \underbrace{\iint_{A_l} \mathbf{u}s^2 \cdot \hat{\mathbf{n}} \,  dA}_{\text{Boundary advection}}  - \underbrace{\iint_{A_{v}}(2s^2)(E-P) \, dA}_{\text{Surface fluxes}} = \underbrace{\iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^2) \, dV}_{\text{Horz. diffusion}}\\
+        -\underbrace{\iiint_V \chi^s \, dV}_{\text{Physical mixing}}-\underbrace{\mathcal{M}_{num, s^2}}_{\text{Numerical mixing}} \quad ,
+   \end{split}
+\end{equation}
+\end{linenomath*}
+where $A_v$ is the area of the control volume boundaries at the sea surface, and $\mathcal{M}_{num, s^2}$ is the $s^2$ numerical mixing. As shown in Eq. \ref{eq:salt2_vint}, five terms affect the time rate of change of $s^2$ within a control volume (i.e., tendency), the advective flux of $s^2$ through the lateral boundaries, the diffusive $s^2$ flux at the sea surface due to evaporation and precipitation, the horizontal turbulent $s^2$ diffusion within the control volume, the prescribed physical mixing, and the numerical mixing. Note the $s^2$ diffusion is expressed as a volume integral instead of a boundary area integral to account for the surface and bottom slopes. The numerical mixing arises only when Eq. \ref{eq:salt2_vint} is discretized and is calculated as 
+\begin{linenomath*}
+\begin{equation} \label{eq:salt2_mnum}
+    \begin{split}
+        \mathcal{M}_{num, s^2} = \mathcal{D} \biggl\{-\iiint_V \frac{\partial s^2}{\partial t} \, dV - \iint_{A_l} \mathbf{u}s^2 \cdot \hat{\mathbf{n}} \,  dA + \iint_{A_{v}}(2s^2)(E-P) \, dA + \\
+        \iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^2) \, dV - \iiint_V \chi^s \, dV\biggl\}.
+   \end{split}
+\end{equation}
+\end{linenomath*}
+
+\subsection{Volume-mean salinity variance budget}
+
+Following \citeA{MacCready_2018} and \citeA{Lorenz_2021}, we define the volume-mean salinity variance as $s^{\prime^2} = (s-\overline{s})^2$, where $\overline{s}$ is the volume-averaged salinity $\frac{1}{V} \iiint_V s \, dV$. A local equation for $s^{\prime^2}$ is obtained by subtracting $\partial_t \overline{s}$ from Eq. \ref{eq:salt_local}, multiplying by $2s^{\prime}$, and applying the product rule:
+\begin{linenomath*}
+\begin{equation} \label{eq:svar_local}
+    \begin{split}
+    \frac{\partial s^{\prime^2}}{\partial t} + \textbf{u} \cdot \nabla s^{\prime^2} = \nabla_H \cdot (\kappa_H \nabla_H s^{\prime^2})+ \frac{\partial}{\partial z} \left(\kappa_s \left(\frac{\partial s^{\prime^2}}{\partial z} \right) \right) -2\kappa_H(\nabla_H s^\prime)^2\\
+     -2\kappa_s \left(\frac{\partial s^\prime}{\partial z} \right)^2 - 2s^{\prime} \frac{\partial \overline{s}}{\partial t} \quad .
+    \end{split}
+\end{equation}
+\end{linenomath*}
+We derive the surface and bottom boundary conditions by multiplying Eq. \ref{eq:salt_bcs} by $2s^{\prime}$:
+\begin{linenomath*}
+\begin{align} \label{eq:svar_bcs}
+    \begin{split}
+         & \kappa_s \left({\frac{\partial s^{\prime^2}}{\partial z}} \right) = 2s^2(E-P) -2s \overline{s}(E-P) \,\, \textrm{at} \,\, z = \zeta \\
+         & \kappa_s \left({\frac{\partial s^{\prime^2}}{\partial z}} \right) = 0 \,\, \textrm{at} \,\, z = -h \quad ,\\
+    \end{split}
+\end{align}
+\end{linenomath*}
+where we have split the $s^{\prime^2}$ surface boundary condition into contributions from $s^2$ and $\overline{s}$ similar to \citeA{Lorenz_2021}. 
+Noting that the volume integral of $s^\prime$ is zero and that $\overline{s}$ has no spatial gradients, volume integrating Eqs. \ref{eq:svar_local}-\ref{eq:svar_bcs} yields
+\begin{linenomath*}
+\begin{equation} \label{eq:svar_int}
+    \begin{split}
+        \underbrace{\iiint_V \frac{\partial s^{\prime^2}}{\partial t} dV}_{\text{Tendency}} + \underbrace{\iint_{A_l} \mathbf{u}s^{\prime^2} \cdot \hat{\mathbf{n}} \, dA}_{\text{Boundary advection}}  - \underbrace{\iint_{A_{v}}(2s^2-2s \overline{s})(E-P) \, dA}_{\text{Surface fluxes}} = \\
+        \underbrace{\iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^{\prime^2}) \, dV}_{\text{Horz. diffusion}}-
+        \underbrace{\iiint_V \chi^s  \, dV}_{\text{Physical mixing}} - \underbrace{\mathcal{M}_{num, s^{\prime^2}}}_\text{Numerical mixing} \quad ,
+   \end{split}
+\end{equation}
+\end{linenomath*}
+where $\mathcal{M}_{num, s^{\prime^2}}$ is the $s^{\prime^2}$ numerical mixing. Similar to the $s^2$ budget, the time rate of change of $s^{\prime^2}$ is controlled by five terms: lateral boundary advection, diffusive fluxes through the vertical boundary, horizontal turbulent diffusion within the control volume, physical mixing, and numerical mixing. As with the $s^2$ budget, $\mathcal{M}_{num, s^{\prime^2}}$ may be calculated by discretizing Eq. \ref{eq:svar_int} and rearranging:
+\begin{linenomath*}
+\begin{equation} \label{eq:sprime2_mnum}
+    \begin{split}
+        \mathcal{M}_{num, s^{\prime^2}} = \mathcal{D} \biggl\{-\iiint_V \frac{\partial s^{\prime^2}}{\partial t} \, dV - \iint_{A_l} \mathbf{u}s^{\prime^2} \cdot \hat{\mathbf{n}} \,  dA + \iint_{A_{v}}(2s^2-2s \overline{s})(E-P) \, dA + \\
+        \iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^{\prime^2}) \, dV - \iiint_V \chi^s \, dV\biggl\}.
+   \end{split}
+\end{equation}
+\end{linenomath*}
+
+Note that the physical mixing $\chi^s$ is the same as in the $s^2$ budget, but it is unclear how $\mathcal{M}_{num, s^{\prime^2}}$ relates to $\mathcal{M}_{num, s^2}$. Hereinafter, we drop the $\mathcal{D}{}$ notation used to signify discretization.
+
+\subsection{Differences between $s^2$ and $s^{\prime^2}$ budgets}
+
+An expression relating $\mathcal{M}_{num, s^{\prime^2}}$ and $\mathcal{M}_{num, s^2}$, making use of the Reynolds decomposition used to define the volume-mean salinity variance, is derived to quantify the differences between the $s^2$ and $s^{\prime^2}$ budgets. If we redefine the salinity as $s = \overline{s}+s^\prime$, where the overline and prime retain their previous definitions, a local equation for $s$ in terms of $\overline{s}$ and $s^\prime$ can be written as
+\begin{linenomath*}
+\begin{equation} \label{eq:s_s'}
+    \frac{\partial (\overline{s}+ s^\prime)}{\partial t}+ \textbf{u} \cdot \nabla(\overline{s}+ s^\prime) = \nabla_H \cdot \big[\kappa_H \nabla_H (\overline{s}+s^\prime) \big]+ \frac{\partial}{\partial z} \left(\kappa_s \left(\frac{\partial (\overline{s}+ s^\prime)}{\partial z} \right) \right) \quad .
+\end{equation}
+\end{linenomath*}
+Multiplying Eq. \ref{eq:s_s'} by $2(\overline{s}+s^\prime)$ leads to an expanded form of the $s^2$ equation:
+\begin{linenomath*}
+\begin{equation} \label{eq:s_s'_exanded}
+    \begin{split}
+        \frac{\partial \overline{s}^2}{\partial t} + 2\overline{s} \frac{\partial s^\prime}{\partial t} +2s^\prime \frac{\partial \overline{s}}{\partial t} + \frac{\partial s^{\prime^2}}{\partial t}+
+        \textbf{u} \cdot \nabla(\overline{s}^2+2 \overline{s} s^\prime+s^{\prime^2}) = \nabla_H \cdot \left(\kappa_H \nabla_H \left(\overline{s}^2+2\overline{s}s^{\prime}+s^{\prime^2} \right) \right) \\
+        + \frac{\partial}{\partial z} \left(\kappa_s \left(\frac{\partial \overline{s}^2}{\partial z} + 2\overline{s} \frac{\partial s^\prime}{\partial z} + \frac{\partial s^{\prime^2}}{\partial z} \right) \right) -2\kappa_H \big[(\nabla_H (\overline{s}+s^\prime))^2 \big]-2 \kappa_s \left(\frac{\partial \overline{s}}{\partial z} + \frac{\partial s^\prime}{\partial z} \right)^{2} \quad .
+    \end{split}
+\end{equation}
+\end{linenomath*}
+We note that any terms containing spatial gradients of $\overline{s}$ vanish from Eq. \ref{eq:s_s'_exanded}. However, we retain them for clarity because $\mathbf{u} \cdot \nabla \overline{s}^2$ does not vanish if the divergence theorem is used to transform the advective fluxes into boundary area integrals. Applying a similar decomposition to the surface and bottom boundary conditions and multiplying by $2(\overline{s}+s^\prime)$,  we have
+\begin{linenomath*}
+\begin{align} \label{eq:salt_bcs_sprime_expanded}
+\begin{split}
+    &  \kappa_s \left(2\overline{s} \frac{\partial s^\prime}{\partial z}+\frac{\partial s^{\prime^2}}{\partial z}\right) = (2\overline{s}^2+4 \overline{s} s^\prime+2s^{\prime^2})(E-P) \,\, \textrm{at} \,\, z = \zeta \\
+    &  \kappa_s \left(2\overline{s} \frac{\partial s^\prime}{\partial z} +\frac{\partial s^{\prime^2}}{\partial z}\right) = 0 \,\, \textrm{at} \,\, z = -h \quad . \\
+\end{split}
+\end{align}
+\end{linenomath*}
+After volume-integrating and rearranging to group like terms together, the $s^2$ budget in terms of $\overline{s}+s^\prime$ becomes
+\begin{linenomath*}
+\begin{equation} \label{eq:differences_vint}
+    \begin{split}
+        & \underbrace{\frac{d \overline{s}^2}{d t} V + \overline{s}^2 \iint_{A_l} \mathbf{u} \cdot \hat{\mathbf{n}} \, dA}_\text{$\overline{s}^2$ tendency and advection}+ \underbrace{2\overline{s} \iiint_V \frac{\partial s^\prime}{\partial t} \, dV+2\overline{s}\iint_{A_l} \mathbf{u}s^{\prime} \cdot \hat{\mathbf{n}} \, dA}_\text{Cross tendency and advection} + \\
+        & \underbrace{\iiint_V \frac{\partial s^{\prime^2}}{\partial t} \, dV+\iint_{A_l}  \mathbf{u}s^{\prime^2} \cdot \hat{\mathbf{n}} \, dA}_\text{$s^{\prime^2}$ tendency and advection}-\underbrace{\iint_{A_{v}} (2\overline{s}^2+4 \overline{s} s^\prime+2s^{\prime^2})(E-P) \, dA}_\text{Surface fluxes} = \\ 
+        & 
+        \underbrace{2 \overline{s} \iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^{\prime}) \, dV}_{\text{Cross horz. diffusion}}+
+        \underbrace{\iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^{\prime^2}) \, dV}_{\text{$s^{\prime^2}$ horz. diffusion}}-\underbrace{\iiint_V \chi^s dV}_\text{Physical mixing} - \underbrace{\mathcal{M}_{num, s^2}}_\text{$s^2$ numerical mixing} \quad . 
+\end{split}
+\end{equation}
+\end{linenomath*}
+
+In current form, Eq. \ref{eq:differences_vint} contains several new terms due to the influence of $\overline{s}$ as well as the $s^{\prime^2}$ tendency and advection terms. The physical mixing remains the same for both budgets and the resulting numerical mixing is the same as the residual of the $s^2$ budget. To quantify the differences in numerical mixing between the $s^2$ and $s^{\prime^2}$ budgets, we obtain an expression for $\mathcal{M}_{num, s^2}-\mathcal{M}_{num, s^{\prime^2}}$ after subtracting Eq. \ref{eq:svar_int} from Eq. \ref{eq:differences_vint} and rearranging:
+\begin{linenomath*}
+\begin{equation} \label{eq:differences}
+    \begin{split}
+    \mathcal{M}_{num, s^2} - \mathcal{M}_{num, s^{\prime^2}}=-\frac{d \overline{s}^2}{d t} V   - 2\overline{s} \iiint_V \frac{\partial s^\prime}{\partial t} \, dV- \overline{s}^2 \iint_{A_l} \mathbf{u} \cdot \hat{\mathbf{n}} \, dA  \\ -2 \overline{s} \iint_{A_l} \mathbf{u}s^{\prime} \cdot \hat{\mathbf{n}} \, dA  + 2 \overline{s} \iiint_{V} \nabla_H \cdot (\kappa_H \nabla_H s^{\prime}) \, dV + \iint_{A_v} (2\overline{s}^2+2 \overline{s} s^\prime)(E-P) \, dA \quad .
+    \end{split}
+\end{equation}
+\end{linenomath*}
+As shown in Eq. \ref{eq:differences}, there are six extra terms that appear when expressing $s^2$ in terms of $\overline{s}$ and $s^{\prime}$: two tendency terms, two advective boundary flux terms, and two turbulent diffusion terms. The first tendency term $(\partial_t \overline{s}^2) V$ describes the evolution of the volume-averaged salinity squared with respect to time, and the second term $2\overline{s} \iiint_V \partial_t s^\prime \, dV$ is a cross term that represents the volume-averaged salinity multiplied by the tendency of the salinity perturbations. The first advection term $\overline{s}^2 \iint_{A_l} \mathbf{u} \, dA$ describes the advection of the flow through the lateral boundaries multiplied by the volume-averaged salinity squared, and the second advection term $2 \overline{s} \iint_{A_l} \textbf{u}s^{\prime} \, dA$ is another cross term that describes the advection of the volume-averaged salinity times the salinity perturbations through the lateral boundaries. Subtracting Eq. \ref{eq:svar_int} from Eq. \ref{eq:differences_vint} will yield a residual that is partially modulated by the model output frequency for unsteady flows, especially if averaged variables are used to compute the budgets. Additionally, the individual terms in each budget (i.e., $s^2$ tendency and $s^{\prime^2}$ tendency) may evolve differently depending on how large the extra terms are in Eq. \ref{eq:differences}. For clarity, we note that analytically, the left-hand-side of Eq. \ref{eq:differences} is equal to zero and arises due to discretization errors during the computation of $\mathcal{M}_{num, s^2}$ and $\mathcal{M}_{num, s^{\prime^2}}$.  We examine how these extra terms affect the dynamics of the $s^2$ budget relative to the $s^{\prime^2}$ budget in Section \ref{sec:results}.
+
+\section{Numerical Model Configuration} \label{sec:numerical}
+
+\subsection{Realistic hydrodynamic model and nested grid}
+
+We use the Texas-Louisiana continental shelf model (TXLA), which covers the entire Texas-Louisiana shelf and outer slopes (Fig. \ref{fig:domain_overview}). The model configuration is similar to \citeA{Qu_2022_NIW} and is reviewed here. The model is a validated, realistic implementation of ROMS configured in this iteration as part of the Coupled-Ocean-Atmosphere-Wave-Sediment Transport modeling system \cite<COAWST ver. 3.7,>[]{Warner_2010}. The model solves the primitive and tracer equations over a curvilinear horizontal grid with terrain-following vertical coordinates \cite{Arakawa_1977, shchepetkin2005regional, Zhang_2012_forecast}. The model uses 30 vertical layers that are concentrated near the surface and bottom to adequately resolve the boundary layers. The horizontal resolution spans from 0.65 km near the coast to 3.7 km near the outer continental slope, with a mean resolution of 1.57 km in the location of the nested grid. 
+
+A third-order upwind scheme and a fourth-order centered scheme are used for momentum advection and Multidimensional Positive Definite Advection (MPDATA) is used for tracer advection \cite{Smolarkiewicz_1998}. The $k-\omega$ scheme is used for vertical mixing \cite{umlauf2003extending, Warner_2005} and horizontal mixing is parameterized along geopotential surfaces with constant horizontal viscosity (5.0 m$^2$s$^{-1}$) and diffusivity (1.0 m$^2$s$^{-1}$) values, both of which are scaled to the grid size. The model uses a baroclinic timestep of 75 s and a barotropic timestep of 1.875 s. The model provides hourly output and neglects tides because they are weak over the region \cite{DiMarco_1998}. The model is one-way nested into Global HYCOM Reanalysis to provide open boundary forcing and uses ERA-Interim datasets to provide surface forcing \cite{Dee_2011}. Additionally, the model uses streamflow data from nine rivers to provide freshwater forcing: Sabine, San Antonio, Trinity, Brazos, Calcasieu, Lavaca, Nueces, including the Mississippi and Atchafalaya, which provides the bulk of the discharge. The streamflow salinity is set to zero at all rivers and streamflow temperature is estimated using the bulk approach described by \citeA{Stefan_1993}.
+
+\begin{figure}[ht] 
+ \centerline{\includegraphics[width=\linewidth]{Figure1_domain.jpg}}
+  \caption{TXLA parent (coarse) and child (fine) model domain outlined with the blue and red lines, respectively. The colorbar displays the model bathymetry with a basemap located above the colorbar.}
+  \label{fig:domain_overview}
+\end{figure}
+
+The nested model is configured to be two-way such that variables are exchanged across the open boundary. The bathymetry and vertical grid parameters of the child domain are the same as the parent's because the child domain was created from the parent domain. The bathymetry of the child domain was obtained by linearly interpolating the bathymetry of the parent domain. The ratio of the nesting is five to one, resulting in a mean horizontal resolution in the child model of 315 m. The surface fluxes, open boundaries and initial conditions were also obtained from the parent model by interpolating the parent model outputs to the child grid. By doing so, the models can reduce initialization shocks typically seen at the beginning of the simulation. A comparison between the parent and child grids along the open boundaries (i.e., contact points) showed that the fluxes in and out of the boundaries were internally conserved. 
+
+The model has been used in several recent studies focusing on small-scale processes and dynamics in the nGoM \cite{Kobashi_2020,Qu_2021, Qu_2022_NIW, qu2022rapid, Xomchuk_2020}. For this study, we focus our analysis to the location of the child grid (Fig. \ref{fig:domain_overview}). The region is located west of the M/A river discharge points, which contribute to the generation of a baroclinic current over the shelf. The region is often saturated with eddies during summer (Fig. \ref{fig:surface_snapshots} e-f) due to formation of baroclinic instabilities \cite{Hetland_2017,Zhang_2012_numerical}. A diurnal land-sea breeze in near-resonance with the local inertial period forces near-inertial motions (e.g., waves and oscillations) that are perturbed by forcing from the surface and riverine freshwater fluxes \cite{zhang2009near}. The volume-integrated flow is strongly time dependent and serves as an excellent test case to investigate the accuracy of the offline methods in a realistic simulation. Previous studies focusing on submesoscale processes in the nGoM \cite{Barkan_2017,Luo_2016} have primarily focused east of the M/A discharge points in the aftermath of the 2010 \textit{Deepwater Horizon} oil spill. Ultimately, the wave-mean flow interactions in our study region can significantly enhance mixing and lead to the rapid vertical exchange of biogeochemical tracers (e.g., oxygen), which becomes more prevalent as the horizontal resolution increases \cite{qu2022rapid}. We anticipate significant numerical mixing due to strong salinity gradients (Fig. \ref{fig:surface_snapshots} a-d), particularly near the northeastern boundary of the child domain where the Atchafalaya plume is more prevalent. 
+
+\subsection{Simulation overview}
+
+We performed two numerical simulations: one of the native TXLA model without nesting (hereinafter the `coarse' simulation), and the second with nesting turned on (hereinafter the `fine' simulation). Both simulations are analyzed from June 3 to July 13, 2010. Due to file corruption issues during the restart process of the fine simulation, we removed the following times (in UTC) from both the coarse and fine grid simulations when directly comparing the simulations: June 17 22:30 to June 18 19:30, June 19 14:30 to 19:30, and July 9 18:30. 
+
+There are several notable mixing events driven by a combination of surface salt fluxes, wind stress, and freshwater input that otherwise contrast with periods of low physical mixing, allowing us to study numerical mixing under a variety of different environmental conditions. Over the inner shelf during the study period, contributions to density variations from variation in the temperature field are small relative to those from salinity variations. We focus our analysis to metrics that influence numerical mixing, in particular different metrics from the velocity gradient tensor normalized by the Coriolis parameter such as vertical relative vorticity $\zeta/f$, horizontal divergence $\delta/f$, horizontal strain rate $\alpha/f$, and the horizontal salinity gradient magnitude $|\nabla_H s|$. They are defined as:
+\begin{linenomath*}
+\begin{equation}
+    \zeta/f = \bigg(\frac{\partial v}{\partial x} - \frac{\partial u}{\partial y}\bigg)/f \quad ,
+\end{equation}
+\end{linenomath*}
+\begin{linenomath*}
+\begin{equation}
+    \delta/f = \bigg(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\bigg)/f \quad ,
+\end{equation}
+\end{linenomath*}
+\begin{linenomath*}
+\begin{equation}
+    \alpha/f = \sqrt{\bigg(\frac{\partial u}{\partial x} - \frac{\partial v}{\partial y}\bigg)^2+\bigg(\frac{\partial v}{\partial x} + \frac{\partial u}{\partial y}\bigg)^2}/f \quad ,
+\end{equation}
+\end{linenomath*}
+\begin{linenomath*}
+\begin{equation}
+    |\nabla_H s| = \sqrt{\bigg(\frac{\partial s}{\partial x} \bigg) ^2 + \bigg(\frac{\partial s}{\partial y} \bigg)^2} \quad .
+\end{equation}
+\end{linenomath*}
+
+To isolate the effects of nesting on model processes, all variables discussed hereinafter from the coarse grid are subsetted offline to the location of the child grid and compared directly with the child grid of the fine simulation. Fig. \ref{fig:surface_snapshots} displays a sample of surface fields for the coarse and fine simulations of salinity, $|\nabla_H s|$, $\zeta/f$, $\delta/f$, and $\alpha/f$ during a time where numerous eddies are seen over the shelf. These eddies are considered to be submesoscale because they exhibit $\mathcal{O}(1)$ surface Rossby numbers, as approximated by $\zeta/f$ \cite{Barkan_2017, Kobashi_2020, McWilliams_2016}. The salinity field of the fine simulation exhibits subtle differences near the northeastern boundary, however the effects of nesting are more striking in the vorticity field. Several frontal eddies with anticyclonic cores and cyclonic filaments are resolved by both simulations. The cyclonic filaments are often associated with frontal convergence \cite{Kobashi_2020} and salinity gradients orders of magnitude stronger than those found in the anticyclonic cores where the the salinity field is more homogeneous. The horizontal strain rate is enhanced throughout the fine simulation, which acts to sharpen the horizontal salinity gradients and enhance frontogenesis \cite{Hoskins_1972}.
+
+\begin{figure} 
+ \centerline{\includegraphics[width = \linewidth]{Figure2_snapshot.jpg}}
+  \caption{Surface fields on June 20, 12:30 UTC for the coarse (left column) and fine (right column) simulations of salinity (a-b), horizontal salinity gradient magnitude $|\nabla_H s|$ (c-d), relative vertical vorticity $\zeta/f$ (e-f), horizontal divergence $\delta/f$ (g-h), and horizontal strain rate $\alpha/f$ (i-j). Note that all velocity gradient tensor quantities are normalized by the Coriolis parameter $f$ and all variables are defined in text.}
+  \label{fig:surface_snapshots}
+\end{figure} 
+
+To better understand the impacts of nesting on surface processes, Fig. \ref{fig:surface_pdfs} displays probability density functions (PDFs) of the various properties discussed above. Fig. \ref{fig:surface_pdfs} also displays the latter three quantities sorted by $\zeta/f>1$, which correspond to $\mathcal{O}(1)$ surface Rossby numbers associated with submesoscale fronts. The associated median and median-skewness of the velocity gradient tensor quantities and $|\nabla_H s|$ are shown in Table \ref{tab:1}. The relative vorticity is skewed cyclonically (positively) with a negative median for both simulations, with the median of the fine simulation decreasing by 159$\%$ and skewness increasing by 31$\%$. The divergence for both simulations have positive medians (i.e., divergence) and negative skewnesses, with the fine simulation increasing over $260 \%$ and the skewness decreasing by $34\%$. The strain for both models follows a $\chi$ distribution, consistent with the results of \citeA{Shcherbina_2013}. The salinity gradient magnitude of the fine simulation has a slightly smaller median and skewness compared to the coarse simulation. When sorted by $\zeta/f>1$, the latter three quantities have significantly higher probabilities towards the tails of their distributions. This makes intuitive sense because the submesoscale fronts are associated with strong horizontal salinity gradients, elevated convergence/divergence, and elevated strain \cite{McWilliams_2016}. Interestingly, PDFs of $|\nabla_H s|$ remain essentially unchanged between the coarse and fine simulations, with slightly stronger gradients at the tail of the fine distribution, suggesting that changes to the velocity gradients do not necessarily result in similar changes to the salinity gradients. 
+
+A possible explanation for the relatively unchanged salinity gradients in the nested model is due to the horizontal mixing scheme. ROMS scales grid-dependent horizontal diffusivities as
+\begin{linenomath*}
+\begin{equation} \label{eq:kappa_H}
+    \kappa_H = \frac{\kappa_{0}}{\max \sqrt{dA}}\sqrt{dA},
+\end{equation}
+\end{linenomath*}
+where $\kappa_0$ is a prescribed background turbulent diffusivity (specified previously) and $dA$ is the lateral grid cell area. The maximum grid cell area is unique to each model grid, resulting in $\kappa_H$ being twice as large on average in the fine simulation compared to the coarse. As we will show in Section \ref{sec:results}, this increases the magnitude of the horizontal mixing and turbulent diffusion significantly, which may prevent the horizontal salinity gradients from sharpening as expected. 
+
+\begin{figure}[ht] 
+ \centerline{\includegraphics[width = \linewidth]{Figure3_surface_pdfs.jpg}}
+  \caption{Probability density functions (PDFs) of surface $\zeta/f$ (a), $\delta/f$ (b), $\alpha/f$ (c), and $|\nabla_H s|$ (d) for the entire simulation period as defined in text. Dashed lines display $\delta/f$, $\alpha/f$, and $|\nabla_H s|$ sorted by values of $\zeta/f>1$, corresponding to where the surface Rossby number becomes $\mathcal{O}(1)$. The black dashed line in (a) demonstrates where $\zeta/f=1$. Each PDF was constructed discretely using 150 equal-spaced bins by first computing histograms and then normalized so the PDFs integrate to one.}
+  \label{fig:surface_pdfs}
+\end{figure}
+
+ \begin{table}
+    \caption{Median and Pearson's median skewness for the surface and whole water column $\zeta/f$, $\delta/f$, $\alpha/f$, and $|\nabla_H s|$ for the coarse and fine simulations. Median quantities are denoted by an overline, and skewness quantities are denoted by a tilde. Median and skewness of the whole water column were computed by subsampling the coarse simulation every three $\xi, \eta \, (x,y)$ points and the fine simulation every 15 $\xi, \eta$ points. Note $|\nabla_H s|$ medians have units of g kg$^{-1}$ m$^{-1}$.}
+    \centering
+        \begin{tabular}{c c c c c c c c c}
+        \hline
+         Simulation & $\overline{\zeta/f}$ & $\widetilde{\zeta/f}$  & $\overline{\delta/f}$ &
+         $\widetilde{\delta/f}$ &
+         $\overline{\alpha/f}$  &
+         $\widetilde{\alpha/f}$ & 
+         $(\overline{|\nabla_H s|})*10^4$  &
+         $\widetilde{|\nabla_H s|}$ \\
+        \hline
+         Coarse: Surf. & -0.054 & 0.296 & 0.009 & -0.154 & 0.470 & 0.757 & 1.000 & 0.926 \\
+         Fine: Surf. & -0.140 & 0.399 & 0.0346 & -0.206 & 0.576 & 0.756 & 0.989 & 0.805 \\
+         Coarse: Whole & -0.002 & 0.092 & 0.002 & -0.049 & 0.405 & 0.767 & 0.905 & 0.884 \\
+         Fine: Whole &  -0.026 & 0.144 & 0.008 & -0.064 & 0.497 & 0.801 & 1.02 & 0.839 \\
+        \hline
+         \end{tabular} 
+         \label{tab:1}
+ \end{table}
+ 
+Trends remain similar for the entire water column (Fig. \ref{fig:whole_pdfs}), however the distributions of $\zeta/f$ and $\delta/f$ are slightly more Gaussian. $\alpha/f$ still follows a $\chi$ distribution, but is significantly weaker relative to the surface distribution.  $|\nabla_H s|$ changes modestly compared to the velocity gradients, with the coarse simulation having slightly larger salinity gradients near the tails of the distribution. 
+
+\begin{figure}[ht] 
+ \centerline{\includegraphics[width = \linewidth]{Figure4_whole_pdfs.jpg}}
+  \caption{Same as Fig. \ref{fig:surface_pdfs}, but for the entire water column.}
+  \label{fig:whole_pdfs}
+\end{figure}
+
+\subsection{Implementation of the online method for numerical mixing}
+
+The online numerical mixing $\mathcal{M}_{num, on}$ is calculated locally following \citeA{Burchard_2008}:
+\begin{linenomath*}    
+\begin{equation}\label{Eq:mnum_online}
+    \mathcal{M}_{num, on} = \frac{A\{ s^2 \}-(A \{s \})^2}{\Delta t} \quad ,
+\end{equation}
+\end{linenomath*}
+
+where $A$ is the advection operator (i.e., MPDATA) and $\Delta t$ is the model time step, which yields the numerical mixing in each grid cell. A discretized version of Eq. \ref{Eq:mnum_online} may be found in \citeA{Burchard_2008}. $\mathcal{M}_{num, on}$ is computed using $s$ as the representative tracer instead of $s^{\prime}$ because $s^{\prime}$ requires calculating $\overline{s}$ for the location of the child grid during the model run. An analysis (not shown) of Eq. \ref{Eq:mnum_online} for a first order upwind scheme suggests that $\mathcal{M}_{num,on}$ should be identical whether $s$ or $s^\prime$ is used as the tracer. However, this is not necessarily the case for higher-order, nonlinear advection schemes that employ more sophisticated numerical algorithms. Therefore, it is unclear whether the online method should converge to $\mathcal{M}_{num, s^{\prime^2}}$ in addition to $\mathcal{M}_{num, s^2}$ if offline discretization errors are small. 
+
+Although we will use the relative agreement between on- and offline methods as the basis to assess this, other sources of spurious mixing such as spurious convection due to high grid cell Reynolds numbers \cite{ilicak2016quantifying, Ilicak_2012}, cabbeling, and numerical diffusion may potentially contaminate both on- and offline methods. Generally, we do not expect these sources to be significant based on the results of \citeA{Wang_2021}. We do not expect spurious convection to be significant because ROMS employs a third-order upstream advection scheme that enforces small grid-scale Reynolds numbers \cite{Ilicak_2012,shchepetkin2005regional}. Cabbeling is also not likely to be an issue, as work by \citeA{barkan2017submesoscalepart2} slightly east of our study area suggested it is less significant in the M/A plume compared to other oceanic regions. However, we cannot say \textit{a priori} whether numerical diffusion will be significant without an analysis of prescribed horizontal mixing and diffusive boundary fluxes. We will revisit these comments in Sections \ref{sec:results}-\ref{sec:discussion}. The numerical implementation of the offline method is shown in \ref{Appendix:offline_method}.
+
+\section{Results} \label{sec:results}
+
+\subsection{Spatial structure of the numerical and physical mixing}
+
+To motivate our analysis of the physical and numerical mixing, Fig. \ref{fig:cross_section} displays cross-sections of $\mathcal{M}_{num, on}$ and $\chi^s$ split into horizontal and vertical components when a strong cross-shelf density gradient is generated by freshwater input for the coarse and fine simulations. A nearshore and offshore pycnocline are observed, where the nearshore pycnocline near 29$^\circ$N is associated with freshwater input from the Atchafalaya River and the offshore near pycnocline is associated with freshwater input from the Mississippi River \cite{Kobashi_2020}. The numerical mixing, although noisy, is approximately 2.75 times larger when averaged over the cross section in the coarse simulation compared to the physical mixing and may be orders of magnitude larger locally. The negative mixing is due to the anti-diffusive properties of MPDATA, which acts to reduce the total mixing but does not have a physical interpretation. The numerical mixing is concentrated primarily where the isopycnals are pinched in the pycnoclines, generally corresponding to strong horizontal salinity gradients. Stronger salinity gradients are located shoreward of 29.25$^{\circ}$N, however the numerical mixing is small relative to the offshore pycnocline, likely due to increased grid resolution. Previous studies have shown that numerical mixing is related to the horizontal salinity gradients \cite{hofmeister2011realistic, Kalra_2019, Klingbeil_2014,Wang_2021} and we investigate this more in Section \ref{sec:discussion}.
+
+\begin{figure}
+ \centerline{\includegraphics[width = \linewidth]{Figure5_cross_section.jpg}}
+  \caption{Cross-sections for the coarse (left) and fine (right) simulations examining mixing and related properties where a strong cross-shelf density gradient is present on June 8, 2010 00:30 UTC. Density (a-b), $\mathcal{M}_{num, on}$ (c-d), $\chi_v^s$ (e-f), $\chi_H^s$ (g-h), $|\nabla_H s|$ (i-j), and magnitude of vertical shear $\sqrt{(\partial_z u)^2+(\partial_z v)^2}$ (k-l). Isopycnals are displayed with gray lines every kg m$^{-3}$ for the range shown in the colorbar. Note that the numerical mixing is on a linear scale and the physical mixing is on a log scale.}
+  \label{fig:cross_section}
+\end{figure}
+
+The physical mixing exhibits vastly different spatial trends when broken into horizontal ($\chi_H^s$) and vertical $\chi_v^s$ components. This is due to two reasons: different parameterizations for the horizontal and vertical turbulent diffusivities and different distributions of the horizontal and vertical salinity gradients. $\chi_v^s$ is concentrated at the surface and in the middle of cross-section. The areas of high physical mixing roughly correspond to where the vertical shear and turbulent diffusivity are strong (and large vertical velocity variance). Similar to the numerical mixing, $\chi_H^s$ is strongly correlated with $|\nabla_H s|$ and comprises 9.1$\%$ of the total physical mixing ($\chi_H^s+\chi_v^s$) when averaged over the cross section. 
+
+Model nesting produces several notable differences, although the general trends remain the same. There are several locations where the numerical mixing in the fine simulation is stronger than the coarse simulation. The physical mixing averaged over the cross-section in the fine simulation is larger than the coarse simulation, with $\chi_H^s$ now comprising 24$\%$ of the total physical mixing. As discussed in Section 3, this is primarily due to an increase in the magnitude of $\kappa_H$ in the fine simulation. The spatially-averaged numerical mixing decreases by $51$\%, with the mean numerical mixing being positive for both simulations. In this particular cross-section, the decrease in average numerical mixing appears to be due to a more symmetric distribution of positive and negative values, which is evident in probability density functions and estimates of skewness over the cross-section. Eq. \ref{Eq:mnum_online} is limited in this application because it does not separate the horizontal and vertical contributions of tracer advection to numerical mixing. Horizontal and vertical tracer advection are often computed with different subroutines in ocean models, which could allow $\mathcal{M}_{num, on}$ to be decomposed into components. Such a decomposition could be used to assess whether refinement of the horizontal or vertical grid resolution is required to reduce numerical mixing.
+
+To examine the broader spatial variability, Fig. \ref{fig:depth_integrated} displays depth- and time-integrated $\chi^s$ and $\mathcal{M}_{num, on}$, the ratio of integrated $\chi_H^s$ to $\chi_v^s$, and the ratio of integrated $\mathcal{M}_{num, on}$ to $\chi^s$. Both $\chi_v^s$ and $\mathcal{M}_{num, on}$ are strongest near the northeastern boundary due to a large influx of brackish water from the M/A river plume. $\chi_H^s$ is more significant near the southwestern boundary. This is unsurprising because the vertical salinity gradients will be weaker relative to the horizontal further offshore where the plume stratification is weaker (in contrast to the northeastern boundary). The integrated $\mathcal{M}_{num, on}$ in the coarse simulation is significantly noisier, with a small patch of negative values concentrated near the northeastern boundary. As a consequence, this will decrease the total mixing and may spuriously alter the timescales of mixing processes associated with submesoscale fronts, although more analysis is needed to confirm this. The integrated $\mathcal{M}_{num, on}$ exceeds $\chi^s$ for a significant portion of the coarse simulation, with the greatest discrepancy occurring near the southwestern boundary where $\chi^s$ is weaker. 
+
+There is a marked enhancement of integrated $\chi^s$ in the fine simulation. This is especially true for the ratio of $\chi_H^s$ to $\chi_v^s$. As discussed previously, we believe this is due to an increase in $\kappa_H$ of the fine simulation. A newly resolved patch of $\chi^s$ in the fine simulation spanning almost half the latitudinal extent of the domain is seen east of $93^{\circ}$W. $\mathcal{M}_{num, on}$ is reduced throughout the domain of the fine simulation. Additionally, the ratio of $\mathcal{M}_{num, on}$ to $\chi^s$ substantially decreases in the fine simulation, with the numerical mixing only exceeding the physical mixing in several patches near the southwestern boundary.
+
+\begin{figure}
+ \centerline{\includegraphics[width = \linewidth]{Figure6_dzdt_int.jpg}}
+  \caption{Various depth and time-integrated mixing quantities for the coarse and fine simulations. Depth- and time-integrated total physical mixing $\chi^s$ (a-b). Ratio of depth- and time-integrated $\chi_H^s$ to $\chi_v^s$ (c-d), where bluer colors indicate more horizontal physical mixing and greener colors indicate less horizontal physical mixing. Depth- and time-integrated $\mathcal{M}_{num, on}$ (e-f). Ratio of depth- and time-integrated $\mathcal{M}_{num,on}$ and $\chi^s$ (g-h), where red colors indicate more numerical mixing and blue colors indicate less numerical mixing.}
+  \label{fig:depth_integrated}
+\end{figure}
+
+\subsection{Temporal variability}
+
+Here, we explore the volume-integrated $s^2$ and $s^{\prime^2}$ budgets and compare the accuracy of the numerical mixing estimated from the $s^{\prime^2}$ budget to the online method. Fig. \ref{fig:budget_comparison} shows a time series for the coarse simulation of surface wind forcing, the terms in Eqs. \ref{eq:salt2_vint} and \ref{eq:svar_int}, and a comparison between the different methods for quantifying volume-integrated numerical mixing. All wind forcing was spatially averaged over the location of the child grid. The land-sea breeze can generally be seen throughout the simulation, with several exceptions (e.g., June 30 and July 7) due to transient wind events such as storms. 
+
+\begin{figure}
+ \centerline{\includegraphics[width = \linewidth]{Figure7_budgets.jpg}}
+  \caption{Time series from the coarse simulation averaged over the location of the child grid for east-west wind stress $\tau_x$, north-south wind stress $\tau_y$, and wind speed (a). Volume-averaged $s^2$ (b), volume-averaged $s^{\prime^2}$ (c), volume-integrated $s^2$ budget (d) and $s^{\prime^2}$ budget (e), and comparison between the offline numerical mixing and the online numerical mixing (f). The tendency and advection terms of Eqs. \ref{eq:salt2_vint} and \ref{eq:svar_int} have been combined using the material derivative $\iiint_V \frac{Dc}{Dt} \, dV$, where $c$ denotes the tracer. The horizontal $s^2$ and s$^{\prime^2}$ diffusion terms were omitted from (d) and (e) because they are more than an order of magnitude smaller than the other terms, but are included in their respective numerical mixing calculations.}
+  \label{fig:budget_comparison}
+\end{figure}
+
+Time series of volume-averaged $s^2$ and $s^{\prime^2}$ (Fig. \ref{fig:budget_comparison} a-b) demonstrate that $s^2\gg s^{\prime^2}$ and that the budgets exhibit a different time dependency. The volume-averaged $s^{\prime^2}$ rarely exceeds $10$ (g kg$^{-1}$)$^2$ and exhibits reduced inertial variability throughout the simulation. The oscillations displayed in the $s^2$ and $s^{\prime^2}$ budgets correspond strongly to the local inertial period ($\sim$ 24 hours) because they are modulated by other variables prone to inertial variability such as the horizontal velocities. Higher frequency oscillations are generated by competition between transient changes in the surface wind field and freshwater input from the M/A rivers. 
+
+For $s^2$ and $s^{\prime^2}$, the advection and tendency terms are highly correlated and have been combined to reduce clutter. Mathematically, this is expressed using the volume integral of their material derivatives and is written as 
+\begin{linenomath*}
+\begin{equation}
+    \iiint_V \frac{Dc}{Dt} \, dV = \iiint_V \frac{\partial c}{\partial t} \, dV + \iint_{A_l} \mathbf{u}c \cdot \hat{\mathbf{n}} \, dA \quad ,
+\end{equation}
+\end{linenomath*}
+ where $c$ is the tracer. Stronger winds are generally associated with larger tendency and advection terms for $s^2$ and $s^{\prime^2}$, which is reflected in their respective material derivatives. The stark difference between the material derivatives and surface fluxes for $s^2$ and $s^{\prime^2}$ elucidates the influence that removing the volume average salinity has on the dynamics of $s^{\prime^2}$ (Fig. \ref{fig:budget_comparison} c-d). $\iiint \frac{D}{Dt}(s^2) \, dV$ is significantly noisier than $\iiint \frac{D}{Dt}(s^{\prime^2}) \, dV$, which we hypothesize is due the larger numerical error associated with the tendency term, and to a lesser extent, the advection term. The tendency term in the $s^2$ budget is nearly an order of magnitude larger than the $s^{\prime^2}$ budget and will experience larger error because both tendency terms are calculated using the same numerical scheme (i.e., centered finite differences). This error could be reduced by increasing the model output frequency, which we investigate in Section \ref{sec:model_output_frequency}. Surface $s^2$ fluxes exert a much larger influence on the $s^2$ budget for much of the simulation, with the physical mixing term often remaining the smallest. The opposite is true for the $s^{\prime^2}$ budget, where the term balance often experiences competition between the physical mixing and the material derivative.  
+
+Estimates of numerical mixing depend strongly on the variable used to define the variance, however both offline methods show variable agreement with respect to time. $\mathcal{M}_{num, s^2}$ is significantly noisier than $\mathcal{M}_{num, s^{\prime^2}}$ and may exceed the other methods by over an order of magnitude despite the online method being derived in terms of $s$ and $s^2$.  $\mathcal{M}_{num, on}$ and $\mathcal{M}_{num, s^{\prime^2}}$ are both positive definite, with $\mathcal{M}_{num, s^{\prime^2}}$ almost always overestimating $\mathcal{M}_{num, on}$. The accuracy of $\mathcal{M}_{num, s^{\prime^2}}$ relative to $\mathcal{M}_{num, on}$ is strongly time dependent and the time-averaged $\mathcal{M}_{num, s^{\prime^2}}$ is 60\% larger than the time-averaged $\mathcal{M}_{num, on}$. From June 17-24, the time-averaged $\mathcal{M}_{num, on}$ is 141\% larger than the time-averaged $\mathcal{M}_{num, s^{\prime^2}}$. From July 1-8, however, it is only 12\% larger. We discuss possible causes for this disagreement, including discretization errors and other sources of spurious mixing that may contaminate the on- and offline methods in Section \ref{sec:discussion}. 
+
+The effects of the extra terms on the behaviour of the $s^2$ budget are further explored in Fig. \ref{fig:s2_extra_terms}. The volume-averaged salinity changes by less than 1 g kg$^{-1}$ over the simulation and experiences a strong inertial signal until the end of June, after which the inertial signal weakens or vanishes for several days at a time. The differences between the $s^2$ and $s^{\prime^2}$ budgets are generally dominated by competition between $(\partial_t \overline{s}^2)V$ and cross-advective flux $2 \overline{s} \iint (\mathbf{u}s^\prime) \cdot \, dA$ ($r = 0.95$, $p \ll 0.05$). Physically, this relationship shows that in the presence of stratification, the differences between the volume-integrated $s^2$ and $s^{\prime^2}$ budgets is partially modulated by the size of the control volume $V$ ($\partial_t \overline{s}^2$ is small relative to $V$) and the advection of the salinity perturbations through the lateral boundaries. The residual of $(\partial_t \overline{s}^2)V+2 \overline{s} \iint (\mathbf{u}s^\prime) \cdot \hat{\mathbf{n}} \, dA$ is balanced out by the differences in surface fluxes $\iint (2 \overline{s}^2 + 2 \overline{s} s^\prime)(E-P) \, dA$ and the volume-averaged salinity squared times the advection of the flow through the lateral boundaries $\overline{s}^2 \iint \mathbf{u} \cdot \hat{\mathbf{n}} \, dA$. The horizontal cross diffusion term $2 \overline{s} \iiint \nabla_H \cdot (\kappa_H \nabla_H s^{\prime}) \, dV$ remains on average several orders of magnitude smaller than the other terms in the $s^2$ and $s^{\prime^2}$ budgets. This is because the horizontal diffusion terms are small for our model due to prescribed value of $\kappa_H$. Ultimately, all of the extra terms in the $s^2$ budget are linked to $\overline{s}$, with $(\partial_t \overline{s}^2)V$ decreasing in magnitude when amplitude of the inertial variability of $\overline{s}$ decreases. The $\overline{s}^2$ advection term is not as sensitive to the changes in the inertial variability of $\overline{s}$ and oscillates between first and second order, becoming more important at the end of June as $\overline{s}$ begins to increase.
+
+\begin{figure}
+ \centerline{\includegraphics[width = \linewidth]{Figure8_extra_terms.jpg}}
+  \caption{Time series from the coarse simulation of the volume-averaged salinity (a) and the balance of the volume-integrated extra terms in the $s^2$ equation given by Eq. \ref{eq:differences}. $\overline{s}^2$ tendency and advection (b), $2 \overline{s} s^\prime$ tendency and advection (c), turbulent horizontal cross diffusion (d), extra $s^2$ surface fluxes (e), and differences between the $s^2$ and $s^{\prime^2}$ numerical mixing $\mathcal{M}_{num, s^2}-\mathcal{M}_{num, s^{\prime^2}}$ (f). $\mathcal{M}_{num, s^2}-\mathcal{M}_{num, s^{\prime^2}}$ yields a large residual that should decrease as model output frequency increases.}
+  \label{fig:s2_extra_terms}
+\end{figure}
+
+To investigate the bulk impacts of nesting on mixing, Fig. \ref{fig:volume-integrated} displays time series volume-integrated $\chi^s$, $\chi_H^s$, and ratios of fine to coarse $\chi^s$, $\mathcal{M}_{num, on}$, total mixing, and the ratio of $\chi^s$ and $\mathcal{M}_{num, on}$ for both simulations. For the coarse simulation, $\chi_H^s$ comprises 2.3$\%$ of the total physical mixing in the coarse simulation and 5.8$\%$ in the fine simulation. In the coarse simulation, the volume-integrated and time-averaged ratio of numerical to total mixing is 50$\%$. For the fine simulation, this ratio decreases to 32$\%$ because the physical mixing increases and the numerical mixing decreases. The time-averaged physical mixing in the fine simulation is 42$\%$ larger than the coarse simulation and is almost always larger instantaneously, with the greatest disparity occurring during the wind-driven mixing event near July 6 where the fine simulation physical mixing is a factor of four larger than the coarse simulation.  The time-averaged numerical mixing in the fine simulation is 35$\%$ smaller on average relative to the coarse simulation and only grows larger than the coarse numerical mixing at several times. The total mixing in the fine simulation is 14$\%$ larger on average than the coarse simulation, but exhibits large temporal variability and may be twice as large or reduced by a third compared to the coarse simulation. During the first three weeks of June, the total mixing in the fine simulation may be more of less than the coarse simulation due to reduced numerical mixing, but for the remainder of the simulation the relative increase in physical mixing generally exceeds the decrease in numerical mixing. A striking comparison is the ratio of numerical to physical mixing. The numerical mixing is larger than the physical mixing in the coarse simulation for a significant portion of the simulation due to the strong inertial variability in the physical mixing, at several times over half an order of magnitude larger. However, this ratio is significantly reduced in the fine simulation. 
+
+\begin{figure}[ht!]
+ \centerline{\includegraphics[width = \linewidth]{Figure9_vintegrated.jpg}}
+  \caption{Time series of volume-integrated $\chi^s$, $\chi_H^s$,  and $\mathcal{M}_{num, on}$ for the coarse and fine simulations (a). All plots below are derived from these values, displaying fine/coarse physical mixing (b), fine/coarse numerical mixing (c), fine/coarse total mixing (d), and numerical/physical mixing for both models (e). Missing values seen in the time series correspond to output lost during the restart process of the fine simulation and were removed from the parent simulation offline for direct comparison. Note each plot is on a log scale of base 10 or base 2.}
+  \label{fig:volume-integrated}
+\end{figure}
+
+\section{Discussion} \label{sec:discussion}
+
+Our analysis of the offline tracer budgets suggests that the $s^2$ budget may overestimate the online numerical mixing by over an order of magnitude (Fig. \ref{fig:budget_comparison}). Building on the work of \citeA{Wang_2021}, we hypothesized that the truncation errors are mainly due to errors associated with the tendency term of each tracer that can be reduced by increasing the model output frequency. To test our hypothesis, we performed two additional numerical simulations of the coarse model and increased the model output frequency, which is described in Section \ref{sec:model_output_frequency}.
+
+Additionally, the local and volume-integrated numerical mixing constitute significant fractions of the total mixing, even when the model resolution is increased to $\mathcal{O}(300)$ m in a two-way nested simulation. Despite the spatially-integrated numerical mixing decreasing in the fine simulation, Fig. \ref{fig:cross_section} suggests that numerical mixing may be occasionally enhanced at the grid-scale. Numerical mixing is dependent on a number of factors, including the magnitude of the horizontal salinity gradients, grid resolution, model timestep, and the representation of dynamical processes. Previous work by \citeA{Wang_2021} suggested that numerical mixing is proportional to the square of the horizontal salinity gradients, however they did not demonstrate that this relationship is robust for higher order and more complex advection schemes. We find, based on Figs.~\ref{fig:surface_pdfs} and~\ref{fig:whole_pdfs} that, on average, the salinity gradients do not increase significantly in the fine grid simulation, but there are more instances of high values of relative vorticity, divergence, and strain. Even when considering the increased horizontal mixing in the fine simulation, the results suggest that different physical processes have emerged in the fine simulation.
+
+\subsection{Effects of model output frequency on the offline budgets} \label{sec:model_output_frequency}
+
+As seen in Section \ref{sec:results}, on- and offline methods result in different estimates of numerical mixing. An important factor in the offline method is the model output frequency. To examine the sensitivity of $\mathcal{M}_{num, s^2}$ and $\mathcal{M}_{num, s^{\prime^2}}$ to model output frequency, we performed two additional numerical simulations of the coarse grid and increased the model output frequency to 30 minutes and 10 minutes (i.e., twice and six times finer than the native resolution, respectively). The results of the simulations are summarized in Fig. \ref{fig:mixing_time_series}.
+
+\begin{figure}[ht!]
+ \centerline{\includegraphics[width = \linewidth]{Figure10_output_freq.jpg}}
+  \caption{Time series for the coarse simulation for model output frequencies of 60 minutes, 30 minutes, and 10 minutes of $\mathcal{M}_{num, s^2}$ (a) and $\mathcal{M}_{num, s^{\prime^2}}$ (b). Comparison of 10 minute output $\mathcal{M}_{num, s^2}$, $\mathcal{M}_{num, s^{\prime^2}}$, and volume-integrated $\mathcal{M}_{num, on}$  (c).}
+  \label{fig:mixing_time_series}
+\end{figure}
+
+As the output frequency increases, $\mathcal{M}_{num,s^2}$ appears to converge towards $\mathcal{M}_{num,s^{\prime^2}}$ but still remains noisy, with the two in much better agreement for the 10 minute output frequency simulation.  $\mathcal{M}_{num,s^{\prime^2}}$ becomes slightly less noisy but the general structure remains unchanged. $\mathcal{M}_{num,on}$ is not sensitive to the model output frequency because it is computed online and does not feature transient spikes as many of the other terms. Interestingly, the convergence between the offline and online methods does not substantially improve, especially during the last week of the simulation when the largest physical and numerical mixing occurs (Fig. \ref{fig:budget_comparison} d). 
+
+There are a number of factors that could cause the difference between on- and offline estimates of numerical mixing, and many of them are difficult to quantify. First, we cannot say with certainty that $\mathcal{M}_{num, on}$ will yield identical results whether $s$ or $s^{\prime}$ is computed locally despite our analysis with a 1D upwind scheme.  Another source of error is our use of lower-order accurate discretizations for the terms in the tracer budgets offline (see \ref{Appendix:offline_method}). For example, ROMS has utilized several higher order time-stepping schemes for tracers since its inception (e.g., third-order Adams Bashforth), whereas we use a first order centered finite difference for time derivatives in the $s^2$ and $s^{\prime^2}$ budgets. Likewise, we used volume-conserving fluxes in the calculation of the net boundary advection instead of reconstructing MPDATA offline. The reason for this is that the offline method is intended to focus on practicality and recreating several complex numerical schemes offline may be more cumbersome than coding the online method into the source code and rerunning the model. Other sources of error are the numerical diffusion of $s^2$ and $s^{\prime^2}$ through the lateral boundaries of the control volume or the generation of spurious convection, which impacts both the online and offline methods. Quantification of numerical diffusion would require estimating a numerical diffusion coefficient and as we have shown, we cannot guarantee an offline calculation will be robust. The situation is similar regarding the quantification of spurious convection. 
+
+Thus, we cannot say with certainty if the online or offline numerical mixing estimates are more accurate. However, we believe the online method should be used as the reference due to the clear influence of discretization errors on the offline method. We can say that increasing the model output frequency will improve the offline estimates, and that the $s^{\prime^2}$ budget will generally yield more accurate estimates of the numerical mixing than the $s^2$ budget, especially at low output frequency. Given that the offline method is not robust for our model, we recommend that the $s^{\prime^2}$ budget be used as a rough approximation for numerical mixing if use of the online method is not possible. In our case, $\mathcal{M}_{num, s^{\prime^2}}$ almost always overestimates $\mathcal{M}_{num, on}$, however there is no guarantee this will be the case for other ocean models.
+
+To test our hypothesis that the higher inaccuracy associated with $\mathcal{M}_{num, s^2}$ is primarily due to errors associated with the tendency term $\iiint_V \partial_t s^2 \, dV$, we down-sampled the 10 minute output of the $s^2$ budget to match the 30 minute output, conducted a term balance on the numerical mixing for each, then calculated the residual. After rearranging Eq. \ref{eq:salt2_vint}, the residual term balance can be written as 
+\begin{linenomath*}
+\begin{equation} \label{eq:downsampled_termbalance}
+    \begin{split}
+    \Delta \mathcal{M}_{num, s^2} = -\Delta \textrm{Tendency}-\Delta \textrm{Advection}+\Delta \textrm{Surface $s^2$ flux}-\Delta \textrm{Physical mixing} \\
+    + \Delta \textrm{Horz. diff.} \quad ,
+    \end{split}
+\end{equation}
+\end{linenomath*}
+where $\Delta = \gamma_{30}-\gamma_{10}$, with $\gamma$ denoting the terms in the volume-integrated $s^2$ budget and the subscripts referring to the model output frequency in minutes. The difference in the estimate of numerical mixing due to differences in model output frequency is given by $\Delta \mathcal{M}_{num, s^2}$. 
+
+We computed the covariance between each term in Eq. \ref{eq:downsampled_termbalance} and $\Delta \mathcal{M}_{num, s^2}$ divided by the variance of $\Delta \mathcal{M}_{num, s^2}$ to test the significance of each term, which we denote by the variable $q$. This provides an estimate of the fraction of the variance in $\Delta \mathcal{M}_{num, s^2}$ explained by each term. For $-\Delta$Tendency, $q = 1.271$ and for $-\Delta$Advection, $q = -0.270$, indicating that $\Delta$Tendency will over-predict $\Delta \mathcal{M}_{num, s^2}$, whereas $-\Delta$Advection will compensate for this over-prediction. When combined, $q = 1.001$, indicating that $\Delta$Physical Mixing, $\Delta$Surface flux, and $\Delta$Horz. Diff. do not significantly contribute to $\Delta \mathcal{M}_{num, s^2}$, which is because they are orders of magnitude smaller relative to $\Delta$Tendency and $\Delta$Advection. $\Delta$Advection is also significant, but to a lesser extent than $\Delta$Tendency because the horizontal velocities are highly unsteady and therefore sensitive to model output frequency. The physical mixing is computed online and remains more periodic relative to $\Delta$Tendency and $\Delta$Advection, so it is less sensitive to model output frequency. Likewise, the freshwater flux $(E-P)$ has an temporal resolution of several hours that is linearly interpolated prior to the calculation of $\Delta$Surface flux, so it is unsurprising it remains insignificant. $\Delta$Horz. diff. does not change signficantly because the horizontal $s^2$ diffusion is well under an order of magnitude smaller than the other terms in the volume-integrated $s^2$ budget. 
+
+\subsection{Relating numerical mixing to horizontal salinity gradient magnitude} \label{sec:salinity_gradient_mag}
+
+As shown in Fig. \ref{fig:cross_section}, numerical mixing may be over an order of magnitude larger than the physical mixing in regions with strong density gradients, generally corresponding to areas of larger $|\nabla_H s|$. \citeA{Smolarkiewicz_1983} showed that after discretizing a one-dimensional advection equation with a first-order upwind scheme, the numerical mixing $\mathcal{M}_{num, up}$ is
+\begin{linenomath*}
+\begin{equation} \label{eq:mnum_approx}
+    \mathcal{M}_{num, up} = |u|\Delta x (1-C) \bigg(\frac{\partial s}{\partial x} \bigg)^2 \sim |u|\Delta x \bigg(\frac{\partial s}{\partial x} \bigg)^2 \quad ,
+\end{equation}
+\end{linenomath*}
+where $|u|$ is the magnitude of the constant horizontal velocity, $\Delta x$ is the horizontal grid resolution, $C=\frac{u \Delta t}{\Delta x}$ is the Courant number with online time step $\Delta t$. After rearranging, it can be shown that the right-hand-side of Eq. \ref{eq:mnum_approx} is formulated such that the numerical mixing is equal to an implicit diffusion coefficient $|u|\Delta x-u^2 \Delta t$ multiplied by the square of the horizontal salinity gradients. As \citeA{Wang_2021} notes, when the Courant number is less than one, the numerical mixing is approximately proportional to the square of the horizontal salinity gradients. \citeA{Wang_2021} applied this equation to a realistic simulation of the Changjiang River plume using two tracer advection schemes (MPDATA and Third-order Upstream-biased Horizontal Scheme) and suggested that this relationship holds true qualitatively (their Figs. 8-9). 
+
+We further investigate the relationship between $\mathcal{M}_{num, on}$ and $(\nabla_H s)^2 = (\partial_x s)^2+(\partial_y s)^2$ in Fig. \ref{fig:mnum_sgrad}, which shows weighted histograms of the absolute value of $\mathcal{M}_{num, on}$ and $(\nabla_H s)^2$ in log$_{10}$ space, weighted by grid cell volume $dV$, for the coarse and fine simulations. We performed a weighted linear regression analysis to test the robustness of the two-dimensional form of Eq. \ref{eq:mnum_approx}. There is a clear log-log relationship between $\mathcal{M}_{num, on}$ and $(\nabla_H s)^2$ ($r^2=0.55$ for coarse simulation, $r^2=0.39$ for the fine simulation). To test for a power law dependence, we conducted an empirical linear fit of $\mathcal{M}_{num, on}$ and $(\nabla_H s)^2$ in log$_{10}$ space, which slightly improved the fit ($r^2=0.60$ for coarse simulation, $r^2=0.46$ for the fine simulation). The relatively high $r^2$ suggest that the horizontal salinity gradients could be used to roughly approximate the numerical mixing, even for higher order and more complex advection schemes.
+
+\begin{figure}[ht!]
+ \centerline{\includegraphics[width =0.9\linewidth]{Figure11_sgradmag_histogram.jpg}}
+  \caption{Histograms of the horizontal salinity gradient squared $(\nabla_H s)^2$ and absolute value of online numerical mixing $|\mathcal{M}_{num, on}|$ weighted by grid cell volume $dV$ for the coarse (a) and fine (b) simulations, and their differences (c). The thick dashed lines in (a)-(b) display weighted linear regression results for the approximate two-dimensional form of Eq. \ref{eq:mnum_approx} (black) and an empirical fit in log-log space (gray). The regressions and weighted coefficients of determination were obtained by subsampling the coarse grid model every three $\xi,\eta$ points and the fine simulation every 15 points for the entire simulation period. The thick dashed gray lines in (c) indicate a slope of 1.}
+  \label{fig:mnum_sgrad}
+\end{figure}
+
+As $(\nabla_H s)^2$ increases, more of the domain volume is concentrated at larger values of $\mathcal{M}_{num, on}$. The relationship begins to taper off at $(\nabla_H s)^2 \sim \mathcal{O}(10^{-6})$ g$^2$ kg$^{-2}$ m$^{-2}$, corresponding to salinity gradients associated with surface fronts and the pycnocline in the M/A river plume. These fronts have strong salinity gradients and numerical mixing, but they occupy a small portion of the water column, hence the decrease in grid cell volume. Weaker salinity gradients are associated with longer length and time scales and are correlated with weaker numerical mixing. 
+
+The differences between the coarse and fine simulations demonstrate that the fine simulation has weaker numerical mixing distributed at stronger salinity gradients than the coarse simulation. In other words, for a given salinity gradient, the fine simulation will experience less numerical mixing on average compared to the coarse simulation. The dividing line separating the positive and negative changes to $dV$ between the simulations has a slope of nearly one, suggesting that the change in numerical mixing is proportional to $(\nabla_H s)^2$. The coefficient of determination is lower in the fine simulation because the numerical mixing depends not only on $|\nabla_H s|$, but the components of grid resolution $dV$, water velocities, and the model timestep. In the fine simulation, $\Delta x$ and $\Delta y$ decreased by a factor of five, but the time-averaged volume-integrated numerical mixing decreases by only 35$\%$, suggesting a nonlinear relationship between numerical mixing, the square of the horizontal salinity gradients, and horizontal grid resolution. Although identifying the exact dynamical feedbacks that cause this non-linearity to arise is beyond the scope of this paper, an analysis (not shown) of the instability angle $\phi_{{Ri}_b}$ derived in \citeA{Thomas_2013} (their Eq. 8) suggests that the fine simulation is more susceptible to symmetric and inertial instabilities than the coarse simulation. Coupled with the sharp changes of the velocity gradient tensor but insignificant changes to $|\nabla_H s|$ in Figs. \ref{fig:surface_pdfs}-\ref{fig:whole_pdfs}, this is consistent with the idea that different dynamical processes emerge as the resolution is increased, which complicates the relationship between horizontal resolution and numerical mixing. However, had $|\nabla_H s|$ increased significantly, this would have increased the numerical mixing in the fine simulation.
+
+\section{Summary and conclusions} \label{sec:conclusions}
+
+We have studied physical and numerical mixing in a numerical model of the Texas-Louisiana (TXLA) continental shelf using a combination of on- and offline methods based on salinity variance dissipation. Salinity variance can be defined in terms of salt squared $s^2$ and volume-mean salinity variance $s^{\prime^2}$. Volume-integrated budgets of $s^2$ and $s^{\prime^2}$ can be used to characterize the physical and numerical mixing within a control volume \cite{Burchard_2019, Qu_2022_box}. The online method, which locally calculates the numerical mixing as the difference between the advected square of the salinity and the square of the advected salinity divided by the model timestep \cite{Burchard_2008}, is used to evaluate the accuracy of the offline methods.
+
+We find that the $s^2$ budget poorly estimates the online numerical mixing because truncation errors in the tendency and advection terms associated with the model output frequency have a greater impact on the $s^2$ budget when $s^2\gg s^{\prime^2}$ for highly unsteady flows, as in the case of the TXLA shelf. This is in contrast to several realistic estuarine models \cite{Li_2018, Li_2021, Warner_2020}, which exhibited volume-averaged salinity variance up to an order of magnitude larger than over the TXLA shelf. A key question resulting from this work is whether this scaling is similar in other river plumes. The $s^{\prime^2}$ numerical mixing agrees much better with the online method, but may exhibit significant error. We find that increasing the model output frequency from one hour to 10 minutes caused the $s^2$ numerical mixing to converge better to the $s^{\prime^2}$ numerical mixing. The offline methods provide a more practical means to quantify numerical mixing because online methods may require rerunning the model. Therefore, we recommend using the $s^{\prime^2}$ budget for offline quantification of numerical mixing for other estuarine and coastal models as a baseline estimate, but use of the online method if analysis at the grid-scale is necessary. 
+
+Additionally, the numerical mixing remains significant relative to the physical mixing even for a submesoscale-resolving coastal ocean model. We find that the volume-integrated numerical mixing comprises 57$\%$ of the bulk physical mixing. Instantaneously, the volume-integrated numerical mixing may exceed the physical mixing by almost half an order of magnitude, motivating us to use a two-way nested model with five times the native horizontal grid resolution to examine the sensitivity of numerical mixing to horizontal resolution. We find that the time-averaged volume-integrated numerical mixing decreases by approximately 35$\%$ in the fine simulation, suggesting a nonlinear relationship between horizontal resolution and numerical mixing. Building on the work of \citeA{Wang_2021}, we use weighted property histograms to show that numerical mixing is approximately proportional to the square of the horizontal salinity gradients $(\nabla_H s)^2$. As horizontal resolution increases, this relationship weakens because newly resolved dynamical processes emerge, which are evident in histograms of the velocity gradient tensor and $|\nabla_H s|$.  
+
+The salinity field and flow structure for the control volume examined here are dominated by interactions between a rich field of submesoscale eddies, sharp fronts, and strong near-inertial currents. Although we studied numerical mixing of salinity, the methods presented here are applicable to any tracer as long as any existing sources or sinks are well represented. Furthermore, the offline budgets may be applied to control volumes as small as a single discrete water column \cite{Wang_2021}, allowing researchers to tailor the control volume to the process of interest. 
+
+It is encouraging that increasing the horizontal grid resolution decreases the numerical mixing and increases the physical mixing, but at the cost of significantly greater computational resources. Another key question resulting from this work is: how do changes in numerical and physical mixing at the grid-scale affect the evolution of the mean flow and tracer fields for estuarine and coastal models? We expect numerical mixing to be significant in other realistic simulations of coastal flows, which is particularly relevant for researchers focusing on submesoscale processes, where the impacts of grid-scale numerical mixing are more likely to be pronounced.
+
+\section*{Data availability statement}
+
+All TXLA model output used in this study is publicly available at \url{https://pong.tamu.edu/thredds/catalog/catalog.html}. The corresponding analysis code is available at \url{https://doi.org/10.5281/zenodo.7566722}. The calculations were performed in Python ver. 3.9 using the xarray \cite{hoyer_stephan_2021_5771208}, xgcm \cite{abernathey_ryan_p_2022_6643579}, and xroms \cite{xroms} packages. More information about specific packages used for analysis can be found in the code repository. 
+%\clearpage
+%Text here ===>>>
+%%
+
+%  Numbered lines in equations:
+%  To add line numbers to lines in equations,
+%  \begin{linenomath*}
+%  \begin{equation}
+%  \end{equation}
+%  \end{linenomath*}
+
+
+
+%% Enter Figures and Tables near as possible to where they are first mentioned:
+%
+% DO NOT USE \psfrag or \subfigure commands.
+%
+% Figure captions go below the figure.
+% Table titles go above tables;  other caption information
+%  should be placed in last line of the table, using
+% \multicolumn2l{$^a$ This is a table note.}
+%
+%----------------
+% EXAMPLE FIGURES
+%
+% \begin{figure}
+% \includegraphics{example.png}
+% \caption{caption}
+% \end{figure}
+%
+% Giving latex a width will help it to scale the figure properly. A simple trick is to use \textwidth. Try this if large figures run off the side of the page.
+% \begin{figure}
+% \noindent\includegraphics[width=\textwidth]{anothersample.png}
+%\caption{caption}
+%\label{pngfiguresample}
+%\end{figure}
+%
+%
+% If you get an error about an unknown bounding box, try specifying the width and height of the figure with the natwidth and natheight options. This is common when trying to add a PDF figure without pdflatex.
+% \begin{figure}
+% \noindent\includegraphics[natwidth=800px,natheight=600px]{samplefigure.pdf}
+%\caption{caption}
+%\label{pdffiguresample}
+%\end{figure}
+%
+%
+% PDFLatex does not seem to be able to process EPS figures. You may want to try the epstopdf package.
+%
+
+%
+% ---------------
+% EXAMPLE TABLE
+% Please do NOT include vertical lines in tables
+% if the paper is accepted, Wiley will replace vertical lines with white space
+% the CLS file modifies table padding and vertical lines may not display well
+%
+%  \begin{table}
+%  \caption{Time of the Transition Between Phase 1 and Phase 2$^{a}$}
+%  \centering
+%  \begin{tabular}{l c}
+%  \hline
+%   Run  & Time (min)  \\
+%  \hline
+%   $l1$  & 260   \\
+%   $l2$  & 300   \\
+%   $l3$  & 340   \\
+%   $h1$  & 270   \\
+%   $h2$  & 250   \\
+%   $h3$  & 380   \\
+%   $r1$  & 370   \\
+%   $r2$  & 390   \\
+%  \hline
+%  \multicolumn{2}{l}{$^{a}$Footnote text here.}
+%  \end{tabular}
+%  \end{table}
+
+%% SIDEWAYS FIGURE and TABLE
+% AGU prefers the use of {sidewaystable} over {landscapetable} as it causes fewer problems.
+%
+% \begin{sidewaysfigure}
+% \includegraphics[width=20pc]{figsamp}
+% \caption{caption here}
+% \label{newfig}
+% \end{sidewaysfigure}
+%
+%  \begin{sidewaystable}
+%  \caption{Caption here}
+% \label{tab:signif_gap_clos}
+%  \begin{tabular}{ccc}
+% one&two&three\\
+% four&five&six
+%  \end{tabular}
+%  \end{sidewaystable}
+
+%% If using numbered lines, please surround equations with \begin{linenomath*}...\end{linenomath*}
+%\begin{linenomath*}
+%\begin{equation}
+%y|{f} \sim g(m, \sigma),
+%\end{equation}
+%\end{linenomath*}
+
+%%% End of body of article
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Optional Appendix goes here
+\appendix
+\section{Numerical implementation of the offline method} \label{Appendix:offline_method}
+
+Here, we provide details of the numerical implementation of Eq. \ref{eq:salt2_mnum} and Eq. \ref{eq:sprime2_mnum} for the case of hourly model output. We used average files to construct the volume-integrated budgets of $s^2$ and $s^{\prime^2}$, which provide averages of all outputted variables between each hour. The calculations are shown for a 3D control volume $V$ larger than one discrete water column. Spatial indices are denoted with subscripts $i,j,k$ corresponding to the $x,y,z$ directions and the temporal index is denoted by $n$. Calculations at the cell centers are denoted with whole indices. Calculations on the center of cell edges, are denoted with half indices. 
+
+Starting with the volume-integrated $s^2$ budget, the tendency term $\mathrm{Tend}^n$ was calculated as
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_tend}
+        \mathrm{Tend}^n = \sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \frac{\partial_t (\delta_{i,j,k}^n (s_{i,j,k}^{n})^2)}{\delta_{i,j,k}^n} \, dV \quad ,
+    \end{equation}
+\end{linenomath*}
+where $\partial_t$ denotes a centered finite difference, i.e., 
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_finitediff}
+        \partial_t (\delta_{i,j,k}^n (s_{i,j,k}^{n})^2) = \frac{\delta_{i,j,k}^{n+1} (s_{i,j,k}^{n+1})^2-\delta_{i,j,k}^{n-1} (s_{i,j,k}^{n-1})^2}{2 \Delta T} \quad ,
+    \end{equation}
+\end{linenomath*}
+where $\delta_{i,j,k}^n$ is the vertical layer thickness, $(s_{i,j,k}^{n})^2$ is the salt squared and $\Delta T$ is the model output frequency, not to be confused with the model timestep (e.g, Eq. \ref{Eq:mnum_online}). $\mathrm{Tend^n}$ is discretized as the volume integral of the time rate of change of the total $s^2$ content in a cell divided by the cell thickness. We computed the tendency terms in this form because the offline method consistently yielded better agreement between $\mathcal{M}_{num,s^2}$, $\mathcal{M}_{num,s^{\prime^2}}$, and $\mathcal{M}_{num,on}$. 
+
+There are several methods to compute the advection term $\mathrm{Adv^n}$. An advantage of using average files compared to model snapshots (history files) is that they include the volume-conserving fluxes Huon and Hvom, which are the volume fluxes through the $x$ and $y$ faces calculated online that are averaged over the specified output frequency. They are defined as
+\begin{linenomath*}
+    \begin{equation}
+        \begin{split}
+        \mathrm{Huon}_{i \pm 1/2,j,k}^n & = (DY_{i\pm 1/2,j})(\delta_{i\pm 1/2,j,k}^n)(u_{i\pm 1/2,j,k}^n) \\
+        \mathrm{Hvom}_{i,j \pm 1/2,k}^n & = (DX_{i,j\pm 1/2})(\delta_{i,j\pm 1/2,k}^n)(v_{i,j\pm 1/2,k}^n) \quad ,
+        \end{split}
+    \end{equation}
+\end{linenomath*}
+where $DY$ is the cell width in the $y$ direction and $DX$ is the cell boundary width in the $x$ direction. As \citeA{MacCready_2016} note, using Huon and Hvom helps reduce errors when quantifying tracer advection through the lateral boundaries. The volume fluxes may also be computed offline without the volume-conserving fluxes, however there may be decrease in accuracy. $\mathrm{Adv}^n$ is formulated such that fluxes out of the control volume are considered positive and was calculated as 
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_adv}
+        \mathrm{Adv}^n = \sum_{j=1}^{J}\sum_{k=1}^{K}(\text{Huon}_{i \pm 1/2, j,k}^n)(s_{i \pm 1/2,j,k}^{n})^2 \bigg|_{W}^{E}+\sum_{i=1}^{I}\sum_{k=1}^{K}(\text{Hvom}_{i,j \pm 1/2,k}^n)(s_{i,j \pm 1/2,k}^{n})^2 \bigg|_{S}^{N}
+    \end{equation}
+\end{linenomath*}
+where $E,W,N,S$ denote the east, west, north, and south boundaries of the control volume, respectively. The half indices in this case correspond to the centers of cell edges at the lateral boundaries. To expand the $\pm$ notation, $(s_{i-1/2,j,k}^{n})^2$ corresponds to $s^2$ at the western boundary of the control volume, $(s_{i+1/2,j,k}^{n})^2$ corresponds to the eastern boundary, $(s_{i,j-1/2,k}^{n})^2$ corresponds to southern boundary, and $(s_{i,j+1/2,k}^{n})^2$ corresponds to the northern boundary. 
+
+The surface $s^2$ flux $\mathrm{surf}^n$ was calculated as
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_surf}
+        \mathrm{surf}^n = \sum_{i=1}^{I}\sum_{j=1}^{J}(2s_{i,j}^n)(s_{i,j}^n) \left(\frac{E_{i,j}^n-P_{i,j}^n}{\rho_w} \right) \, dA
+    \end{equation}
+\end{linenomath*}
+where $E_{i,j}^n$ and $P_{i,j}^n$ are the evaporation and precipitation per unit area (Evaporation and Rain in ROMS output) computed online as part of the model forcing, and $\rho_w$ is the density of freshwater set to a constant value of 1000 kg m$^{-3}$. 
+
+The volume-integrated horizontal diffusion $\mathrm{Hdiff}^n$ was calculated as
+\begin{linenomath*}
+    \begin{equation}
+        \begin{split} \label{eq:append_hdiff}
+            \mathrm{Hdiff}^n = \sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \partial_x \left[(\kappa_{H,i \pm 1/2,j}) \left(\partial_x (s_{i,j,k}^{n})^2\right)\right] + \\ \partial_y \left[(\kappa_{H,i,j \pm 1/2}) \left(\partial_y (s_{i,j,k}^{n})^2\right) \right]\, dV \quad ,
+        \end{split}
+    \end{equation}
+\end{linenomath*}
+where $\kappa_{H,i,j}$ is the horizontal turbulent diffusivity computed offline as defined in Eq. \ref{eq:kappa_H}. $\kappa_{H,i,j}$ was first linearly interpolated to the centers of cell edges to align the model grid after computing horizontal derivatives $\partial_x$ and $\partial_y$ of $s^2$, which are calculated using a Jacobian to account for the change of the sea surface height with respect to time \cite{shchepetkin2005regional}. Further details of the Jacobian calculation may be found in \citeA{xroms}. 
+
+The resolved vertical mixing $(\chi_v^s)^n$ was calculated online so offline discretization errors do not bias comparisons with $\mathcal{M}_{num, on}$. $(\chi_v^s)^n$ was calculated as 
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_vmix}
+        (\chi_v^s)^n = \sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \mathrm{Vert. \, Mix}_{i,j,k}^n \, dV,
+    \end{equation}
+\end{linenomath*}
+where $\mathrm{Vert. \, Mix}$ is the resolved vertical mixing, denoted by $\mathrm{AKr}$ in ROMS syntax (not to be confused with $\mathrm{AKs}$, the resolved vertical salinity diffusion coefficient). $\mathrm{AKr}$ was linearly interpolated to the cell centers of the vertical grid. We note that offline calculations of $(\chi_v^s)^n$, although not used in this study, tended to overestimate the online calculations.
+
+The resolved horizontal mixing $(\chi_H^s)^n$ was computed offline because it is not currently programmed into the ROMS source code. It is also much smaller than other terms for our model, so offline discretization errors do not significantly impact $\mathcal{M}_{num, s^2}$.  $(\chi_H^s)^n$ was calculated as
+\begin{linenomath*}
+    \begin{equation} \label{eq:append_hmix}
+        (\chi_H^s)^n = \sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} 2\kappa_{H,i,j} \left[ (\partial_x s_{i,j,k}^n)^2+(\partial_y s_{i,j,k}^n)^2 \right]  \, dV.
+    \end{equation}
+\end{linenomath*}
+Similar to the calculation of $\mathrm{Hdiff}^n$, horizontal gradients were calculated using a Jacobian but in this case interpolated to cell centers for both horizontal and vertical grids. Once each of the terms are known, they may be substituted into Eq. \ref{eq:salt2_mnum} to obtain $\mathcal{M}_{num, s^2}$.
+
+The process for discretizing the volume-mean salinity variance budget is similar, but requires calculation of the volume-averaged salinity $\overline{s}^n$. $\overline{s}^n$ was calculated as
+\begin{linenomath*}
+    \begin{equation}
+        \overline{s}^n = \frac{1}{V^n} \sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} s_{i,j,k}^n \, dV \quad .
+    \end{equation}
+\end{linenomath*}
+The volume-mean salinity variance $(s_{i,j,k}^{{\prime^2}})^n$ may be calculated as
+\begin{linenomath*}
+    \begin{equation}
+        (s_{i,j,k}^{{\prime^2}})^n = (s_{i,j,k}^n-\overline{s}^n)^2.
+    \end{equation}
+\end{linenomath*}
+The terms in Eq. \ref{eq:sprime2_mnum} may be calculated by substituting $(s_{i,j,k}^{\prime})^n$ and $(s_{i,j,k}^{\prime^2})^n$ where applicable into Eqs. \ref{eq:append_tend}-\ref{eq:append_finitediff} and Eqs. \ref{eq:append_adv}-\ref{eq:append_hdiff}. Recalculation of the physical mixing terms is not required because $\overline{s}^n$ has no spatial gradients.
+
+%Previous equations - don't delete for now, I will before resubmission.
+% The semi-discrete $s^2$ budget in ROMS syntax can be written as
+% \begin{equation}
+%     \begin{split}
+%         & \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \frac{\partial_t (\delta_{i,j,k}^n s_{i,j,k}^{2,n})}{\delta_{i,j,k}^n} \, dV}_{\text{Tendency}}+ \underbrace{\left[(\text{Huon}_{i \pm 1/2, j,k}^n)(s_{i \pm 1/2,j,k}^{2,n}) \bigg|_{E}^{ W}+(\text{Hvom}_{i,j \pm 1/2,k}^n)(s_{i,j \pm 1/2,k}^{2,n}) \bigg|_{N}^{S}\right]}_{\text{Boundary advective flux}} - \\ &
+%         \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}(2s_{i,j}^n)(s_{i,j}^n) \left(\frac{E_{i,j}^n-P_{i,j}^n}{\rho_w} \right)dA}_{\text{Surface $s^2$ flux}} = \underbrace{\left[(\kappa_{H,i \pm 1/2,j}) \left(\partial_x (s_{i,j,k}^{2,n})\right)(A_{yz}) \bigg|_{E}^{ W} + (\kappa_{H,i,j \pm 1/2}) \left(\partial_y (s_{i,j \pm 1/2,k}^{2,n})\right)(A_{xz}) \bigg|_{N}^{S}\right]}_{\text{Horz. diffusive boundary flux}} - \\ &
+%          \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} 2\kappa_{H,i,j} [ (\partial_x s_{i,j,k}^n)^2+(\partial_y s_{i,j,k}^n)^2]  \, dV}_{\text{Horz. mixing}} - \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \text{AKr}_{i,j,k}^n \, dV}_{\text{Vert. mixing}} - \mathcal{M}_{num, s^{\prime^2,n}}
+%     \end{split}
+% \end{equation}
+% where $E,W,S,N$ denote the east, west, south, and north boundaries of the control volume, respectively, and $\rho_w$ is the density of freshwater set to a constant value of $1000$ kg m$^{-3}$. For the calculation of the horizontal diffusive flux, $A_{yz}$ and $A_{xz}$ refer to the the east (west) and south (north) control volume boundary areas.
+
+% The volume-integrated $s^{\prime^2}$ budget is written as 
+% \begin{equation}
+%     \begin{split}
+%         \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \frac{\partial_t (\delta_{i,j,k}^n s_{i,j,k}^{\prime^2,n})}{\delta_{i,j,k}^n} \, dV}_{\text{Tendency}}+ \underbrace{\left[(\text{Huon}_{j,k}^n)(s_{j,k}^{\prime^2,n}) \bigg|_{E}^{ W}+(\text{Hvom}_{i,k}^n)(s_{i,k}^{\prime^2,n}) \bigg|_{N}^{S}\right]}_{\text{Boundary advection}} - \\
+%         \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}(2s_{i,j}^{\prime, n})(s_{i,j}^n) \left(\frac{E_{i,j}^n-P_{i,j}^n}{\rho_w} \right)dA}_{\text{Surface $s^{\prime^2}$ flux}} = \underbrace{\left[(\kappa_{H,i,j}) \left(\partial_x (s_{j,k}^{\prime^2,n})\right)(A_{yz}) \bigg|_{E}^{W} + (\kappa_{H,i,j}) \left(\partial_y (s_{i,k}^{\prime^2,n})\right)(A_{xz}) \bigg|_{N}^{S}\right]}_{\text{Horz. diff. boundary flux}} - \\
+%          \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} 2\kappa_{H,i,j} [ (\partial_x s_{i,j,k}^n)^2+(\partial_y s_{i,j,k}^n)^2]  \, dV}_{\text{Horz. mixing}} - \underbrace{\sum_{i=1}^{I}\sum_{j=1}^{J}\sum_{k=1}^{K} \text{AKr}_{i,j,k}^n \, dV}_{\text{Vert. mixing}} - \mathcal{M}_{num, s^{2,n}}
+%     \end{split}
+% \end{equation}
+% Additional information regarding the implementation on the C grid may be found in the GitHub repository in the data availability statement. An alternative, fully discretized version of the volume-mean salinity variance budget (with different surface boundary conditions) can be found in the appendix of \citeA{Wang_2021}. Likewise, a semi-discrete representation of the $s^{\prime^2}$ budget using a combination of average and diagnostic files may be found in the appendix of \citeA{Broatch_2022} .
+%
+% The \appendix command resets counters and redefines section heads
+%
+% After typing \appendix
+%
+%\section{Here Is Appendix Title}
+% will show
+% A: Here Is Appendix Title
+%
+%\appendix
+%\section{Here is a sample appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Optional Glossary, Notation or Acronym section goes here:
+%
+%%%%%%%%%%%%%%
+% Glossary is only allowed in Reviews of Geophysics
+%  \begin{glossary}
+%  \term{Term}
+%   Term Definition here
+%  \term{Term}
+%   Term Definition here
+%  \term{Term}
+%   Term Definition here
+%  \end{glossary}
+
+%
+%%%%%%%%%%%%%%
+% Acronyms
+%   \begin{acronyms}
+%   \acro{Acronym}
+%   Definition here
+%   \acro{EMOS}
+%   Ensemble model output statistics
+%   \acro{ECMWF}
+%   Centre for Medium-Range Weather Forecasts
+%   \end{acronyms}
+
+%
+%%%%%%%%%%%%%%
+% Notation
+%   \begin{notation}
+%   \notation{$a+b$} Notation Definition here
+%   \notation{$e=mc^2$}
+%   Equation in German-born physicist Albert Einstein's theory of special
+%  relativity that showed that the increased relativistic mass ($m$) of a
+%  body comes from the energy of motion of the body—that is, its kinetic
+%  energy ($E$)—divided by the speed of light squared ($c^2$).
+%   \end{notation}
+
+\acknowledgments
+D.S. and D.K. were funded by the SUNRISE project, NSF grant OCE-1851470. L.Q. and R.H. were funded by the ICoM project, a United States DOE grant. Numerical simulations were performed using the Texas A$\&$M High Performance Research Computing clusters. We thank Parker MacCready and Erin Broatch for the advice on computing the offline tracer budgets. We thank Spencer Jones, Ping Chang, and Scott Socolofsky for their helpful discussions while preparing this manuscript. We thank three anonymous reviewers whose comments substantially improved this manuscript. 
+
+
+%% ------------------------------------------------------------------------ %%
+%% References and Citations
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \bibliography{<name of your .bib file>} don't specify the file extension
+%
+% don't specify bibliographystyle
+
+% In the References section, cite the data/software described in the Availability Statement (this includes primary and processed data used for your research). For details on data/software citation as well as examples, see the Data & Software Citation section of the Data & Software for Authors guidance
+% https://www.agu.org/Publish-with-AGU/Publish/Author-Resources/Data-and-Software-for-Authors#citation
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliography{references}
+%Reference citation instructions and examples:
+%
+% Please use ONLY \cite and \citeA for reference citations.
+% \cite for parenthetical references
+% ...as shown in recent studies (Simpson et al., 2019)
+% \citeA for in-text citations
+% ...Simpson et al. (2019) have shown...
+%
+%
+%...as shown by \citeA{jskilby}.
+%...as shown by \citeA{lewin76}, \citeA{carson86}, \citeA{bartoldy02}, and \citeA{rinaldi03}.
+%...has been shown \cite{jskilbye}.
+%...has been shown \cite{lewin76,carson86,bartoldy02,rinaldi03}.
+%... \cite <i.e.>[]{lewin76,carson86,bartoldy02,rinaldi03}.
+%...has been shown by \cite <e.g.,>[and others]{lewin76}.
+%
+% apacite uses < > for prenotes and [ ] for postnotes
+% DO NOT use other cite commands (e.g., \citet, \citep, \citeyear, \citealp, etc.).
+% \nocite is okay to use to add references from your Supporting Information
+%
+\end{document}
+
+
+
+More Information and Advice:
+
+%% ------------------------------------------------------------------------ %%
+%
+%  SECTION HEADS
+%
+%% ------------------------------------------------------------------------ %%
+
+% Capitalize the first letter of each word (except for
+% prepositions, conjunctions, and articles that are
+% three or fewer letters).
+
+% AGU follows standard outline style; therefore, there cannot be a section 1 without
+% a section 2, or a section 2.3.1 without a section 2.3.2.
+% Please make sure your section numbers are balanced.
+% ---------------
+% Level 1 head
+%
+% Use the \section{} command to identify level 1 heads;
+% type the appropriate head wording between the curly
+% brackets, as shown below.
+%
+%An example:
+%\section{Level 1 Head: Introduction}
+%
+% ---------------
+% Level 2 head
+%
+% Use the \subsection{} command to identify level 2 heads.
+%An example:
+%\subsection{Level 2 Head}
+%
+% ---------------
+% Level 3 head
+%
+% Use the \subsubsection{} command to identify level 3 heads
+%An example:
+%\subsubsection{Level 3 Head}
+%
+%---------------
+% Level 4 head
+%
+% Use the \subsubsubsection{} command to identify level 3 heads
+% An example:
+%\subsubsubsection{Level 4 Head} An example.
+%
+%% ------------------------------------------------------------------------ %%
+%
+%  IN-TEXT LISTS
+%
+%% ------------------------------------------------------------------------ %%
+%
+% Do not use bulleted lists; enumerated lists are okay.
+% \begin{enumerate}
+% \item
+% \item
+% \item
+% \end{enumerate}
+%
+%% ------------------------------------------------------------------------ %%
+%
+%  EQUATIONS
+%
+%% ------------------------------------------------------------------------ %%
+
+% Single-line equations are centered.
+% Equation arrays will appear left-aligned.
+
+Math coded inside display math mode \[ ...\]
+ will not be numbered, e.g.,:
+ \[ x^2=y^2 + z^2\]
+
+ Math coded inside \begin{equation} and \end{equation} will
+ be automatically numbered, e.g.,:
+ \begin{equation}
+ x^2=y^2 + z^2
+ \end{equation}
+
+
+% To create multiline equations, use the
+% \begin{Eqarray} and \end{Eqarray} environment
+% as demonstrated below.
+\begin{Eqarray}
+  x_{1} & = & (x - x_{0}) \cos \Theta \nonumber \\
+        && + (y - y_{0}) \sin \Theta  \nonumber \\
+  y_{1} & = & -(x - x_{0}) \sin \Theta \nonumber \\
+        && + (y - y_{0}) \cos \Theta.
+\end{Eqarray}
+
+%If you don't want an equation number, use the star form:
+%\begin{Eqarray*}...\end{Eqarray*}
+
+% Break each line at a sign of operation
+% (+, -, etc.) if possible, with the sign of operation
+% on the new line.
+
+% Indent second and subsequent lines to align with
+% the first character following the equal sign on the
+% first line.
+
+% Use an \hspace{} command to insert horizontal space
+% into your equation if necessary. Place an appropriate
+% unit of measure between the curly braces, e.g.
+% \hspace{1in}; you may have to experiment to achieve
+% the correct amount of space.
+
+
+%% ------------------------------------------------------------------------ %%
+%
+%  EQUATION NUMBERING: COUNTER
+%
+%% ------------------------------------------------------------------------ %%
+
+% You may change equation numbering by resetting
+% the equation counter or by explicitly numbering
+% an equation.
+
+% To explicitly number an equation, type \Equm{}
+% (with the desired number between the brackets)
+% after the \begin{equation} or \begin{Eqarray}
+% command.  The \Equm{} command will affect only
+% the equation it appears with; LaTeX will number
+% any equations appearing later in the manuscript
+% according to the equation counter.
+%
+
+% If you have a multiline equation that needs only
+% one equation number, use a \nonumber command in
+% front of the double backslashes (\\) as shown in
+% the multiline equation above.
+
+% If you are using line numbers, remember to surround
+% equations with \begin{linenomath*}...\end{linenomath*}
+
+%  To add line numbers to lines in equations:
+%  \begin{linenomath*}
+%  \begin{equation}
+%  \end{equation}
+%  \end{linenomath*}
+
+
+
